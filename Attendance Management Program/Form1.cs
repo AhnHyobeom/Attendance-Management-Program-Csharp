@@ -22,6 +22,8 @@ namespace Attendance_Management_Program
         MySqlDataReader reader;
         // using UART
         string datain = ""; // UART로 부터 들어온 data를 읽어 들이는 변수
+        string tapName = ""; // Selected tabName
+        bool registeMode = false; // Selected RegisterMode
         int[] inputSensorData; // UART로 부터 들어온 data Parsing Array
         int inputSensorDataIndex = 0;
 
@@ -68,7 +70,7 @@ namespace Attendance_Management_Program
             dgv_record.Columns[0].Name = "근무일자";
             dgv_record.Columns[1].Name = "부서명";
             dgv_record.Columns[2].Name = "이름";
-            dgv_record.Columns[3].Name = "직금";
+            dgv_record.Columns[3].Name = "직급";
             dgv_record.Columns[4].Name = "출근시간";
             dgv_record.Columns[5].Name = "퇴근시간";
             dgv_record.Columns[6].Name = "출근구분";
@@ -102,7 +104,133 @@ namespace Attendance_Management_Program
             // list_management_DataGridViewInit From DB
             list_management_list_DataGridViewInit();
             list_management_employee_DataGridViewInit();
+            // record_DataGridView From DB
+            // label_record_search init
+            string searchToday = DateTime.Now.ToString("yyyy-MM-dd");
+            string query = "SELECT * FROM workRecord WHERE w_day = '";
+            query += searchToday + "'";
+            showRecodDGV(query);
+            label_record_search.Text = "검색 내용 -> " + searchToday;
         }
+
+        // -------------------------------- start tap control --------------------------------
+        private void tabControl1_Selected(object sender, TabControlEventArgs e)
+        {
+            switch (e.TabPage.Name)
+            {
+                case "tp_list_management":
+                    tapName = "tp_list_management";
+                    break;
+                case "tp_record":
+                    tapName = "tp_record";
+                    break;
+                case "tp_daily_TnA_status":
+                    tapName = "tp_daily_TnA_status";
+                    break;
+                case "tp_daily_TnA_chart":
+                    tapName = "tp_daily_TnA_chart";
+                    break;
+                case "tp_monthly_TnA_status":
+                    tapName = "tp_monthly_TnA_status";
+                    break;
+                case "tp_monthly_TnA_chart":
+                    tapName = "tp_monthly_TnA_chart";
+                    break;
+                case "tp_department_TnA_status":
+                    tapName = "tp_department_TnA_status";
+                    break;
+                case "tp_employee_registration":
+                    tapName = "tp_employee_registration";
+                    serialPort1.WriteLine("startRegMODE" + Environment.NewLine);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        // -------------------------------- end tap control --------------------------------
+
+        // ------------------------------------------- start STM32 -> C# -------------------------------------------
+        private void serialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            datain = serialPort1.ReadLine();
+            this.Invoke(new EventHandler(dataParse));
+        }
+        private void dataParse(object sender, EventArgs e)
+        {
+            if(tapName == "tp_employee_registration")
+            {
+                if (datain.Length != 10)
+                {
+                    serialPort1.WriteLine("regFAIL" + Environment.NewLine);
+                    return;
+                }
+                sql = "SELECT COUNT(*) AS cnt FROM employee WHERE e_rfid = '";
+                sql += datain + "'";
+                int count = -1;
+                try
+                {
+                    cmd = new MySqlCommand(sql, conn);
+                    count = Convert.ToInt32(cmd.ExecuteScalar());
+                }
+                catch (MySqlException)
+                {
+                    MessageBox.Show("employee COUNT(*) query exception !!!");
+                }
+                // RFID already exists -> unregister
+                if (count == 1)
+                {
+                    registeMode = false;
+                    label_registration_cardEnter.Text = "카드 입력 값 : 등록해제";
+                    serialPort1.WriteLine("unregMode" + Environment.NewLine);
+                    sql = "SELECT * FROM employee WHERE e_rfid = '";
+                    sql += datain + "'";
+                    string e_status = "";
+                    string e_cf = "";
+                    string e_name = "";
+                    int e_dm_id = 0;
+                    string e_position = "";
+
+                    try
+                    {
+                        cmd.CommandText = sql;
+                        reader = cmd.ExecuteReader();
+                        reader.Read();
+
+                        e_status = (string)reader["e_status"];
+                        e_cf = (string)reader["e_cf"];
+                        e_name = (string)reader["e_name"];
+                        e_dm_id = (int)reader["e_dm_id"];
+                        e_position = (string)reader["e_position"];
+
+                        tb_registration_rfid.Text = datain;
+                        tb_registration_status.Text = e_status;
+                        tb_registration_classification.Text = e_cf;
+                        tb_registration_name.Text = e_name;
+                        tb_registration_dm_id.Text = string.Format("{0:D3}", e_dm_id);
+                        tb_registration_position.Text = e_position;
+                        reader.Close();
+                    }
+                    catch(MySqlException)
+                    {
+                        MessageBox.Show("employee SELECT * query exception !!!");
+                    }
+                }
+                else
+                { // register
+                    registeMode = true;
+                    serialPort1.WriteLine("regMode" + Environment.NewLine);
+                    label_registration_cardEnter.Text = "카드 입력 값 : 사원등록";
+                    tb_registration_rfid.Text = datain;
+                    tb_registration_status.Text = "";
+                    tb_registration_classification.Text = "";
+                    tb_registration_name.Text = "";
+                    tb_registration_dm_id.Text = "";
+                    tb_registration_position.Text = "";
+                }
+            }
+        }
+        // ------------------------------------------- end STM32 -> C# -------------------------------------------
 
         // ------------------------- start list management TAB -------------------------
         private void list_management_list_DataGridViewInit()
@@ -116,14 +244,12 @@ namespace Attendance_Management_Program
 
                 int dm_id = 0;
                 string dm_name = "";
-                string temp_dm_id = "";
                 // init Rows
                 while (reader.Read())
                 {
                     dm_name = (string)reader["dm_name"];
                     dm_id = (int)reader["dm_id"];
-                    temp_dm_id = string.Format("{0:D3}", dm_id);
-                    dataGridView1.Rows.Add(++noIndex, dm_name, temp_dm_id);
+                    dataGridView1.Rows.Add(++noIndex, dm_name, string.Format("{0:D3}", dm_id));
                 }
             }
             catch(MySqlException)
@@ -220,21 +346,206 @@ namespace Attendance_Management_Program
             g4.DrawRectangle(p, new Rectangle(tb_record_workday.Location.X - variance, tb_record_workday.Location.Y - variance, tb_record_workday.Width + variance, tb_record_workday.Height + variance));
         }
 
-        // ------------------------- end recod TAB -------------------------
-
-        private void serialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        private void showRecodDGV(string query)
         {
-            sql = "SELECT* FROM tmp WHERE t_date BETWEEN '2021-04-29-09-45-00' AND '2021-04-29-09-46-00'";
+            // INSERT INTO workRecord(w_id, w_e_rfid, w_day, w_workonTime, w_workoffTime, w_workoncf, w_workoffcf, w_ew, w_hw, w_tw) 
+            // VALUES(NULL, '0000000012', '2021-05-07', '00:00:00', '00:00:00', '휴가', '휴가', '00:00:00', '00:00:00', '00:00:00');
+            sql = query;
             cmd.CommandText = sql;
             reader = cmd.ExecuteReader();
-            reader.Read();
-            DateTime date = new DateTime();
-            date = (DateTime)reader["t_date"];
-            int t_room1 = (int)reader["t_room1"];
-            int t_room2 = (int)reader["t_room2"];
-            int t_room3 = (int)reader["t_room3"];
+
+            string w_e_rfid = "";
+            string w_e_name = "";
+            int w_dm_id = 0;
+            string e_department = "";
+            string w_e_position = "";
+            DateTime w_day = new DateTime();
+            TimeSpan w_workonTime = new TimeSpan();
+            TimeSpan w_workoffTime = new TimeSpan();
+            string w_workoncf = "";
+            string w_workoffcf = "";
+            TimeSpan w_ew = new TimeSpan();
+            TimeSpan w_hw = new TimeSpan();
+            TimeSpan w_tw = new TimeSpan();
+
+            dgv_record.Rows.Clear();
+            // employee table 제외 
+            while (reader.Read())
+            {
+                w_e_rfid = (string)reader["w_e_rfid"];
+                w_day = (DateTime)reader["w_day"];
+                w_e_name = (string)reader["w_e_name"];
+                w_dm_id = (int)reader["w_dm_id"];
+                e_department = department_name[w_dm_id];
+                w_e_position = (string)reader["w_e_position"];
+                w_workonTime = (TimeSpan)reader["w_workonTime"];
+                w_workoffTime = (TimeSpan)reader["w_workoffTime"];
+                if (reader["w_workoncf"] == DBNull.Value)
+                {
+                    w_workoncf = "";
+                }
+                else
+                {
+                    w_workoncf = (string)reader["w_workoncf"];
+                }
+                if (reader["w_workoffcf"] == DBNull.Value)
+                {
+                    w_workoffcf = "";
+                }
+                else
+                {
+                    w_workoffcf = (string)reader["w_workoffcf"];
+                }
+                w_ew = (TimeSpan)reader["w_ew"];
+                w_hw = (TimeSpan)reader["w_hw"];
+                w_tw = (TimeSpan)reader["w_tw"];
+                dgv_record.Rows.Add(w_day.ToString("yyyy-MM-dd"), e_department, w_e_name, w_e_position, w_workonTime.ToString(@"hh\:mm"), w_workoffTime.ToString(@"hh\:mm"), w_workoncf, w_workoffcf, w_ew.ToString(@"hh\:mm"), w_hw.ToString(@"hh\:mm"), w_tw.ToString(@"hh\:mm"));
+            }
             reader.Close();
+            
         }
+        private void btn_record_init1_Click(object sender, EventArgs e)
+        {
+            string searchToday = DateTime.Now.ToString("yyyy-MM-dd");
+            string query = "SELECT * FROM workRecord WHERE w_day = '";
+            query += searchToday + "'";
+            showRecodDGV(query);
+            label_record_search.Text = "검색 내용 -> " + searchToday;
+        }
+        private void btn_record_init2_Click(object sender, EventArgs e)
+        {
+            string searchToday = DateTime.Now.ToString("yyyy-MM-dd");
+            string query = "SELECT * FROM workRecord WHERE w_day = '";
+            query += searchToday + "'";
+            showRecodDGV(query);
+            label_record_search.Text = "검색 내용 -> " + searchToday;
+        }
+        private void btn_record_search1_Click(object sender, EventArgs e)
+        {
+            record_search_dgv();
+        }
+        private void btn_record_search2_Click(object sender, EventArgs e)
+        {
+            record_search_dgv();
+        }
+        private void record_search_dgv()
+        {
+            dgv_record.Rows.Clear();
+            string query = "SELECT * FROM workRecord WHERE ";
+            label_record_search.Text = "검색 내용 -> ";
+            bool AND = false;
+            if (tb_record_dename.Text != "")
+            {
+                List<string> li = department_name.ToList();
+                int index = li.FindIndex(x => x.Contains(tb_record_dename.Text));
+                query += "w_dm_id = " + index;
+                AND = true;
+                label_record_search.Text += "부서명 : " + department_name[index];
+            }
+            if (tb_record_name.Text != "")
+            {
+                if (AND)
+                {
+                    query += " AND ";
+                }
+                query += "w_e_name = '" + tb_record_name.Text + "'";
+                AND = true;
+                label_record_search.Text += "이름 : " + tb_record_name.Text;
+            }
+            if (tb_record_position.Text != "")
+            {
+                if (AND)
+                {
+                    query += " AND ";
+                }
+                query += "w_e_position = '" + tb_record_position.Text + "'";
+                AND = true;
+                label_record_search.Text += "직급 : " + tb_record_position.Text;
+            }
+            if (tb_record_workday.Text != "")
+            {
+                if (AND)
+                {
+                    query += " AND ";
+                }
+                query += "w_day = '" + tb_record_workday.Text + "'";
+                label_record_search.Text += "근무일자 : " + tb_record_workday.Text;
+            }
+            if (!query.Contains("w_dm_id") && !query.Contains("w_e_name") && !query.Contains("w_e_position") && !query.Contains("w_day"))
+            {
+                string searchToday = DateTime.Now.ToString("yyyy-MM-dd");
+                query = "SELECT * FROM workRecord WHERE w_day = '";
+                query += searchToday + "'";
+                showRecodDGV(query);
+                label_record_search.Text = "검색 내용 -> " + searchToday;
+            }
+            else
+            {
+                showRecodDGV(query);
+            }
+        }
+        // ------------------------- end recod TAB -------------------------
+
+        // ---------------------------------------- start employee registration ----------------------------------------
+        private void button1_Click(object sender, EventArgs e)
+        { // btn_registration_reg
+            if(!registeMode)
+            { // unRegistration
+                try
+                {
+                    sql = "DELETE FROM employee WHERE e_rfid = '";
+                    sql += tb_registration_rfid.Text + "'";
+                    cmd.CommandText = sql;
+                    cmd.ExecuteNonQuery();
+
+                    label_registration_cardEnter.Text = "등록해제 성공 !";
+                    tb_registration_rfid.Text = "";
+                    tb_registration_status.Text = "";
+                    tb_registration_classification.Text = "";
+                    tb_registration_name.Text = "";
+                    tb_registration_dm_id.Text = "";
+                    tb_registration_position.Text = "";
+                    serialPort1.WriteLine("unregisterScs" + Environment.NewLine);
+                    dataGridView2.Rows.Clear();
+                    list_management_employee_DataGridViewInit();
+                }
+                catch(MySqlException)
+                {
+                    MessageBox.Show("unRegistration DELETE FAIL !!!");
+                }
+            }
+            else
+            { // registration
+                try
+                {
+                    sql = "INSERT INTO employee(e_rfid, e_status, e_cf, e_name, e_dm_id, e_position) VALUES ('";
+                    sql += tb_registration_rfid.Text + "', '" + tb_registration_status.Text + "', '";
+                    sql += tb_registration_classification.Text + "', '" + tb_registration_name.Text + "', ";
+                    sql += tb_registration_dm_id.Text + ", '" + tb_registration_position.Text + "')";
+                    cmd.CommandText = sql;
+                    cmd.ExecuteNonQuery();
+
+                    label_registration_cardEnter.Text = "사원등록 성공 !";
+                    tb_registration_rfid.Text = "";
+                    tb_registration_status.Text = "";
+                    tb_registration_classification.Text = "";
+                    tb_registration_name.Text = "";
+                    tb_registration_dm_id.Text = "";
+                    tb_registration_position.Text = "";
+                    serialPort1.WriteLine("regScs" + Environment.NewLine);
+                    dataGridView2.Rows.Clear();
+                    list_management_employee_DataGridViewInit();
+                }
+                catch (MySqlException)
+                {
+                    MessageBox.Show("registration INSERT FAIL !!!");
+                }
+            }
+        }
+        //INSERT INTO employee(e_rfid, e_status, e_cf, e_name, e_dm_id, e_position) 
+        //VALUES('0000000000', '재직', '정규직', '이기훈', 0, '대표이사');
+
+        // ---------------------------------------- end employee registration ----------------------------------------
 
         // ------------------------- start menu design -------------------------
         private List<Label> menu;
@@ -302,6 +613,7 @@ namespace Attendance_Management_Program
         {
             
         }
+
         // ------------------------- end click miss -------------------------
     }
 }

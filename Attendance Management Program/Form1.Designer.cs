@@ -94,6 +94,23 @@ namespace Attendance_Management_Program
             this.btn_record_search2 = new System.Windows.Forms.Button();
             this.btn_record_init2 = new System.Windows.Forms.Button();
             this.btn_record_init1 = new System.Windows.Forms.Button();
+            this.label_record_search = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.btn_registration_reg = new System.Windows.Forms.Button();
+            this.label_registration_cardEnter = new System.Windows.Forms.Label();
+            this.tb_registration_rfid = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.tb_registration_status = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.tb_registration_name = new System.Windows.Forms.TextBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.tb_registration_classification = new System.Windows.Forms.TextBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.tb_registration_dm_id = new System.Windows.Forms.TextBox();
+            this.label20 = new System.Windows.Forms.Label();
+            this.tb_registration_position = new System.Windows.Forms.TextBox();
+            this.button3 = new System.Windows.Forms.Button();
             this.Tab_Back.SuspendLayout();
             this.Tab_Menu_Back.SuspendLayout();
             this.Tab_Menu_Select_Back.SuspendLayout();
@@ -305,9 +322,11 @@ namespace Attendance_Management_Program
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(1177, 707);
             this.tabControl1.TabIndex = 1;
+            this.tabControl1.Selected += new System.Windows.Forms.TabControlEventHandler(this.tabControl1_Selected);
             // 
             // tp_list_management
             // 
+            this.tp_list_management.BackColor = System.Drawing.Color.White;
             this.tp_list_management.Controls.Add(this.dataGridView2);
             this.tp_list_management.Controls.Add(this.label1);
             this.tp_list_management.Controls.Add(this.dataGridView1);
@@ -319,22 +338,24 @@ namespace Attendance_Management_Program
             this.tp_list_management.Size = new System.Drawing.Size(1169, 678);
             this.tp_list_management.TabIndex = 1;
             this.tp_list_management.Text = "목록관리";
-            this.tp_list_management.UseVisualStyleBackColor = true;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("굴림", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.label2.BackColor = System.Drawing.Color.White;
+            this.label2.Font = new System.Drawing.Font("Arial", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.DimGray;
             this.label2.Location = new System.Drawing.Point(70, 105);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(176, 30);
+            this.label2.Size = new System.Drawing.Size(141, 35);
             this.label2.TabIndex = 0;
             this.label2.Text = "■ 목록관리";
             // 
             // tp_record
             // 
+            this.tp_record.BackColor = System.Drawing.Color.White;
+            this.tp_record.Controls.Add(this.label_record_search);
             this.tp_record.Controls.Add(this.btn_record_init2);
             this.tp_record.Controls.Add(this.btn_record_init1);
             this.tp_record.Controls.Add(this.tb_record_position);
@@ -355,7 +376,6 @@ namespace Attendance_Management_Program
             this.tp_record.Size = new System.Drawing.Size(1169, 678);
             this.tp_record.TabIndex = 0;
             this.tp_record.Text = "출퇴근기록";
-            this.tp_record.UseVisualStyleBackColor = true;
             this.tp_record.Paint += new System.Windows.Forms.PaintEventHandler(this.tp_record_Paint);
             // 
             // tp_daily_TnA_status
@@ -470,6 +490,23 @@ namespace Attendance_Management_Program
             // 
             // tp_employee_registration
             // 
+            this.tp_employee_registration.BackColor = System.Drawing.Color.DarkSlateGray;
+            this.tp_employee_registration.Controls.Add(this.button3);
+            this.tp_employee_registration.Controls.Add(this.label20);
+            this.tp_employee_registration.Controls.Add(this.tb_registration_position);
+            this.tp_employee_registration.Controls.Add(this.label19);
+            this.tp_employee_registration.Controls.Add(this.tb_registration_dm_id);
+            this.tp_employee_registration.Controls.Add(this.label17);
+            this.tp_employee_registration.Controls.Add(this.tb_registration_name);
+            this.tp_employee_registration.Controls.Add(this.label18);
+            this.tp_employee_registration.Controls.Add(this.tb_registration_classification);
+            this.tp_employee_registration.Controls.Add(this.label16);
+            this.tp_employee_registration.Controls.Add(this.tb_registration_status);
+            this.tp_employee_registration.Controls.Add(this.label15);
+            this.tp_employee_registration.Controls.Add(this.tb_registration_rfid);
+            this.tp_employee_registration.Controls.Add(this.label_registration_cardEnter);
+            this.tp_employee_registration.Controls.Add(this.btn_registration_reg);
+            this.tp_employee_registration.Controls.Add(this.label13);
             this.tp_employee_registration.Controls.Add(this.label7);
             this.tp_employee_registration.Location = new System.Drawing.Point(4, 25);
             this.tp_employee_registration.Margin = new System.Windows.Forms.Padding(2);
@@ -477,18 +514,19 @@ namespace Attendance_Management_Program
             this.tp_employee_registration.Size = new System.Drawing.Size(1169, 678);
             this.tp_employee_registration.TabIndex = 7;
             this.tp_employee_registration.Text = "tabPage8";
-            this.tp_employee_registration.UseVisualStyleBackColor = true;
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("굴림", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label7.Location = new System.Drawing.Point(10, 16);
+            this.label7.BackColor = System.Drawing.Color.Transparent;
+            this.label7.Font = new System.Drawing.Font("굴림", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label7.ForeColor = System.Drawing.Color.Beige;
+            this.label7.Location = new System.Drawing.Point(137, 42);
             this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(224, 30);
+            this.label7.Size = new System.Drawing.Size(252, 28);
             this.label7.TabIndex = 5;
-            this.label7.Text = "사원등록/ 해제";
+            this.label7.Text = "■ RFID 카드 입력";
             // 
             // dataGridView1
             // 
@@ -537,12 +575,13 @@ namespace Attendance_Management_Program
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("굴림", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.label1.BackColor = System.Drawing.Color.White;
+            this.label1.Font = new System.Drawing.Font("Arial", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.DimGray;
             this.label1.Location = new System.Drawing.Point(564, 105);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(187, 30);
+            this.label1.Size = new System.Drawing.Size(149, 35);
             this.label1.TabIndex = 2;
             this.label1.Text = "■ 사원 정보";
             // 
@@ -617,7 +656,7 @@ namespace Attendance_Management_Program
             dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgv_record.DefaultCellStyle = dataGridViewCellStyle13;
             this.dgv_record.EnableHeadersVisualStyles = false;
-            this.dgv_record.Location = new System.Drawing.Point(27, 158);
+            this.dgv_record.Location = new System.Drawing.Point(27, 192);
             this.dgv_record.Name = "dgv_record";
             dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle14.BackColor = System.Drawing.SystemColors.Control;
@@ -631,7 +670,7 @@ namespace Attendance_Management_Program
             dataGridViewCellStyle15.Font = new System.Drawing.Font("맑은 고딕", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.dgv_record.RowsDefaultCellStyle = dataGridViewCellStyle15;
             this.dgv_record.RowTemplate.Height = 27;
-            this.dgv_record.Size = new System.Drawing.Size(1120, 500);
+            this.dgv_record.Size = new System.Drawing.Size(1120, 466);
             this.dgv_record.TabIndex = 5;
             // 
             // label3
@@ -755,6 +794,7 @@ namespace Attendance_Management_Program
             this.btn_record_search1.Size = new System.Drawing.Size(55, 43);
             this.btn_record_search1.TabIndex = 14;
             this.btn_record_search1.UseVisualStyleBackColor = false;
+            this.btn_record_search1.Click += new System.EventHandler(this.btn_record_search1_Click);
             // 
             // btn_record_search2
             // 
@@ -771,6 +811,7 @@ namespace Attendance_Management_Program
             this.btn_record_search2.TabIndex = 15;
             this.btn_record_search2.Text = "검색하기";
             this.btn_record_search2.UseVisualStyleBackColor = false;
+            this.btn_record_search2.Click += new System.EventHandler(this.btn_record_search2_Click);
             // 
             // btn_record_init2
             // 
@@ -787,6 +828,7 @@ namespace Attendance_Management_Program
             this.btn_record_init2.TabIndex = 17;
             this.btn_record_init2.Text = "원래대로";
             this.btn_record_init2.UseVisualStyleBackColor = false;
+            this.btn_record_init2.Click += new System.EventHandler(this.btn_record_init2_Click);
             // 
             // btn_record_init1
             // 
@@ -801,6 +843,234 @@ namespace Attendance_Management_Program
             this.btn_record_init1.Size = new System.Drawing.Size(55, 43);
             this.btn_record_init1.TabIndex = 16;
             this.btn_record_init1.UseVisualStyleBackColor = false;
+            this.btn_record_init1.Click += new System.EventHandler(this.btn_record_init1_Click);
+            // 
+            // label_record_search
+            // 
+            this.label_record_search.AutoSize = true;
+            this.label_record_search.Font = new System.Drawing.Font("Arial", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_record_search.ForeColor = System.Drawing.Color.DimGray;
+            this.label_record_search.Location = new System.Drawing.Point(28, 133);
+            this.label_record_search.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label_record_search.Name = "label_record_search";
+            this.label_record_search.Size = new System.Drawing.Size(287, 33);
+            this.label_record_search.TabIndex = 3;
+            this.label_record_search.Text = "검색 내용 : 2021-05-10";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.BackColor = System.Drawing.Color.Transparent;
+            this.label13.Font = new System.Drawing.Font("굴림", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label13.ForeColor = System.Drawing.Color.Beige;
+            this.label13.Location = new System.Drawing.Point(21, 96);
+            this.label13.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(523, 19);
+            this.label13.TabIndex = 6;
+            this.label13.Text = "해제 -> 자동으로 빈칸 완성, 등록 -> RIFD값만 자동 완성";
+            // 
+            // btn_registration_reg
+            // 
+            this.btn_registration_reg.BackColor = System.Drawing.Color.MediumAquamarine;
+            this.btn_registration_reg.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
+            this.btn_registration_reg.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Silver;
+            this.btn_registration_reg.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.btn_registration_reg.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_registration_reg.Font = new System.Drawing.Font("Arial", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_registration_reg.ForeColor = System.Drawing.Color.Beige;
+            this.btn_registration_reg.Location = new System.Drawing.Point(142, 587);
+            this.btn_registration_reg.Name = "btn_registration_reg";
+            this.btn_registration_reg.Size = new System.Drawing.Size(160, 43);
+            this.btn_registration_reg.TabIndex = 16;
+            this.btn_registration_reg.Text = "등록 / 해제";
+            this.btn_registration_reg.UseVisualStyleBackColor = false;
+            this.btn_registration_reg.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // label_registration_cardEnter
+            // 
+            this.label_registration_cardEnter.AutoSize = true;
+            this.label_registration_cardEnter.BackColor = System.Drawing.Color.Transparent;
+            this.label_registration_cardEnter.Font = new System.Drawing.Font("굴림", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.label_registration_cardEnter.ForeColor = System.Drawing.Color.Beige;
+            this.label_registration_cardEnter.Location = new System.Drawing.Point(93, 135);
+            this.label_registration_cardEnter.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label_registration_cardEnter.Name = "label_registration_cardEnter";
+            this.label_registration_cardEnter.Size = new System.Drawing.Size(180, 24);
+            this.label_registration_cardEnter.TabIndex = 18;
+            this.label_registration_cardEnter.Text = "카드 입력 값 : ";
+            // 
+            // tb_registration_rfid
+            // 
+            this.tb_registration_rfid.BackColor = System.Drawing.Color.DarkSlateGray;
+            this.tb_registration_rfid.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tb_registration_rfid.Font = new System.Drawing.Font("Arial", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tb_registration_rfid.ForeColor = System.Drawing.Color.Beige;
+            this.tb_registration_rfid.Location = new System.Drawing.Point(101, 196);
+            this.tb_registration_rfid.Multiline = true;
+            this.tb_registration_rfid.Name = "tb_registration_rfid";
+            this.tb_registration_rfid.Size = new System.Drawing.Size(322, 31);
+            this.tb_registration_rfid.TabIndex = 20;
+            this.tb_registration_rfid.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.BackColor = System.Drawing.Color.Transparent;
+            this.label15.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label15.ForeColor = System.Drawing.Color.Beige;
+            this.label15.Location = new System.Drawing.Point(21, 201);
+            this.label15.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(55, 24);
+            this.label15.TabIndex = 21;
+            this.label15.Text = "RIFD";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.BackColor = System.Drawing.Color.Transparent;
+            this.label16.Font = new System.Drawing.Font("Arial", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label16.ForeColor = System.Drawing.Color.Beige;
+            this.label16.Location = new System.Drawing.Point(20, 264);
+            this.label16.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(51, 29);
+            this.label16.TabIndex = 23;
+            this.label16.Text = "상태";
+            // 
+            // tb_registration_status
+            // 
+            this.tb_registration_status.BackColor = System.Drawing.Color.DarkSlateGray;
+            this.tb_registration_status.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tb_registration_status.Font = new System.Drawing.Font("Arial", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tb_registration_status.ForeColor = System.Drawing.Color.Beige;
+            this.tb_registration_status.Location = new System.Drawing.Point(101, 262);
+            this.tb_registration_status.Multiline = true;
+            this.tb_registration_status.Name = "tb_registration_status";
+            this.tb_registration_status.Size = new System.Drawing.Size(322, 31);
+            this.tb_registration_status.TabIndex = 22;
+            this.tb_registration_status.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.BackColor = System.Drawing.Color.Transparent;
+            this.label17.Font = new System.Drawing.Font("Arial", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label17.ForeColor = System.Drawing.Color.Beige;
+            this.label17.Location = new System.Drawing.Point(20, 389);
+            this.label17.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(51, 29);
+            this.label17.TabIndex = 27;
+            this.label17.Text = "이름";
+            // 
+            // tb_registration_name
+            // 
+            this.tb_registration_name.BackColor = System.Drawing.Color.DarkSlateGray;
+            this.tb_registration_name.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tb_registration_name.Font = new System.Drawing.Font("Arial", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tb_registration_name.ForeColor = System.Drawing.Color.Beige;
+            this.tb_registration_name.Location = new System.Drawing.Point(101, 387);
+            this.tb_registration_name.Multiline = true;
+            this.tb_registration_name.Name = "tb_registration_name";
+            this.tb_registration_name.Size = new System.Drawing.Size(322, 31);
+            this.tb_registration_name.TabIndex = 26;
+            this.tb_registration_name.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.BackColor = System.Drawing.Color.Transparent;
+            this.label18.Font = new System.Drawing.Font("Arial", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label18.ForeColor = System.Drawing.Color.Beige;
+            this.label18.Location = new System.Drawing.Point(20, 326);
+            this.label18.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(51, 29);
+            this.label18.TabIndex = 25;
+            this.label18.Text = "구분";
+            // 
+            // tb_registration_classification
+            // 
+            this.tb_registration_classification.BackColor = System.Drawing.Color.DarkSlateGray;
+            this.tb_registration_classification.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tb_registration_classification.Font = new System.Drawing.Font("Arial", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tb_registration_classification.ForeColor = System.Drawing.Color.Beige;
+            this.tb_registration_classification.Location = new System.Drawing.Point(101, 326);
+            this.tb_registration_classification.Multiline = true;
+            this.tb_registration_classification.Name = "tb_registration_classification";
+            this.tb_registration_classification.Size = new System.Drawing.Size(322, 31);
+            this.tb_registration_classification.TabIndex = 24;
+            this.tb_registration_classification.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.BackColor = System.Drawing.Color.Transparent;
+            this.label19.Font = new System.Drawing.Font("Arial", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label19.ForeColor = System.Drawing.Color.Beige;
+            this.label19.Location = new System.Drawing.Point(7, 453);
+            this.label19.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(89, 29);
+            this.label19.TabIndex = 29;
+            this.label19.Text = "부서코드";
+            // 
+            // tb_registration_dm_id
+            // 
+            this.tb_registration_dm_id.BackColor = System.Drawing.Color.DarkSlateGray;
+            this.tb_registration_dm_id.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tb_registration_dm_id.Font = new System.Drawing.Font("Arial", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tb_registration_dm_id.ForeColor = System.Drawing.Color.Beige;
+            this.tb_registration_dm_id.Location = new System.Drawing.Point(101, 451);
+            this.tb_registration_dm_id.Multiline = true;
+            this.tb_registration_dm_id.Name = "tb_registration_dm_id";
+            this.tb_registration_dm_id.Size = new System.Drawing.Size(322, 31);
+            this.tb_registration_dm_id.TabIndex = 28;
+            this.tb_registration_dm_id.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.BackColor = System.Drawing.Color.Transparent;
+            this.label20.Font = new System.Drawing.Font("Arial", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label20.ForeColor = System.Drawing.Color.Beige;
+            this.label20.Location = new System.Drawing.Point(20, 519);
+            this.label20.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(51, 29);
+            this.label20.TabIndex = 31;
+            this.label20.Text = "직급";
+            // 
+            // tb_registration_position
+            // 
+            this.tb_registration_position.BackColor = System.Drawing.Color.DarkSlateGray;
+            this.tb_registration_position.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tb_registration_position.Font = new System.Drawing.Font("Arial", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tb_registration_position.ForeColor = System.Drawing.Color.Beige;
+            this.tb_registration_position.Location = new System.Drawing.Point(101, 519);
+            this.tb_registration_position.Multiline = true;
+            this.tb_registration_position.Name = "tb_registration_position";
+            this.tb_registration_position.Size = new System.Drawing.Size(322, 31);
+            this.tb_registration_position.TabIndex = 30;
+            this.tb_registration_position.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // button3
+            // 
+            this.button3.BackColor = System.Drawing.Color.MediumAquamarine;
+            this.button3.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
+            this.button3.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Silver;
+            this.button3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button3.Font = new System.Drawing.Font("Arial", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button3.ForeColor = System.Drawing.Color.Beige;
+            this.button3.Location = new System.Drawing.Point(781, 587);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(160, 43);
+            this.button3.TabIndex = 32;
+            this.button3.Text = "등록 / 해제";
+            this.button3.UseVisualStyleBackColor = false;
             // 
             // Form1
             // 
@@ -810,7 +1080,7 @@ namespace Attendance_Management_Program
             this.Controls.Add(this.label_main_top_left);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Form1";
+            this.Text = "근태 현황 관리 프로그램";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
             this.Tab_Back.ResumeLayout(false);
@@ -890,6 +1160,23 @@ namespace Attendance_Management_Program
         private System.Windows.Forms.Button btn_record_search2;
         private System.Windows.Forms.Button btn_record_init2;
         private System.Windows.Forms.Button btn_record_init1;
+        private System.Windows.Forms.Label label_record_search;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label_registration_cardEnter;
+        private System.Windows.Forms.Button btn_registration_reg;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.TextBox tb_registration_status;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.TextBox tb_registration_rfid;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.TextBox tb_registration_dm_id;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.TextBox tb_registration_name;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.TextBox tb_registration_classification;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.TextBox tb_registration_position;
+        private System.Windows.Forms.Button button3;
     }
 }
 
