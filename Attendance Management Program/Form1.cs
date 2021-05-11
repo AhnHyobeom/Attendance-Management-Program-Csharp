@@ -24,11 +24,9 @@ namespace Attendance_Management_Program
         string datain = ""; // UART로 부터 들어온 data를 읽어 들이는 변수
         string tapName = ""; // Selected tabName
         bool registeMode = false; // Selected RegisterMode
-        int[] inputSensorData; // UART로 부터 들어온 data Parsing Array
-        int inputSensorDataIndex = 0;
-
-        string[] department_name = { "사장실", "임원진", "관리팀", "컨텐츠팀", "개발팀", 
-                                    "고객지원팀", "기획팀", "디자인팀", "업무지원팀" }; 
+        List<string> dataParseList = new List<string>(); // dataReceive Event data parsing
+        string[] department_name = { "사장실", "임원진", "관리팀", "컨텐츠팀", "개발팀",
+                                    "고객지원팀", "기획팀", "디자인팀", "업무지원팀" };
         public Form1()
         {
             InitializeComponent();
@@ -79,22 +77,34 @@ namespace Attendance_Management_Program
             dgv_record.Columns[9].Name = "휴일근무시간";
             dgv_record.Columns[10].Name = "총근무시간";
 
+            // employee registration retirement DataGridView init Columns
+            dgv_retirement.ColumnCount = 6;
+            dgv_retirement.Columns[0].Name = "이름";
+            dgv_retirement.Columns[1].Name = "부서명";
+            dgv_retirement.Columns[2].Name = "직급";
+            dgv_retirement.Columns[3].Name = "입사일";
+            dgv_retirement.Columns[4].Name = "퇴사일";
+            dgv_retirement.Columns[5].Name = "근속기간";
+
             try
             {
                 conn = new MySqlConnection(connStr);
                 conn.Open();
                 cmd = new MySqlCommand("", conn);
             }
-            catch(MySqlException)
+            catch (MySqlException)
             {
                 MessageBox.Show("MySQL Connection Exception Error !!!" + Environment.NewLine);
             }
-            
+
             try
             {
                 serialPort1.PortName = "COM3";
                 serialPort1.BaudRate = 115200;
                 serialPort1.Open(); // 예외 처리 집어 넣을것
+                serialPort1.DiscardOutBuffer();
+                serialPort1.DiscardInBuffer();
+                serialPort1.WriteLine("normalMODE" + Environment.NewLine);
             }
             catch (UnauthorizedAccessException)
             {
@@ -111,33 +121,42 @@ namespace Attendance_Management_Program
             query += searchToday + "'";
             showRecodDGV(query);
             label_record_search.Text = "검색 내용 -> " + searchToday;
+
+            showRetirementDGV();
         }
 
-        // -------------------------------- start tap control --------------------------------
+        // ---------------------------------------- start tap control ----------------------------------------
         private void tabControl1_Selected(object sender, TabControlEventArgs e)
         {
             switch (e.TabPage.Name)
             {
                 case "tp_list_management":
                     tapName = "tp_list_management";
+                    serialPort1.WriteLine("normalMODE" + Environment.NewLine);
                     break;
                 case "tp_record":
                     tapName = "tp_record";
+                    serialPort1.WriteLine("normalMODE" + Environment.NewLine);
                     break;
                 case "tp_daily_TnA_status":
                     tapName = "tp_daily_TnA_status";
+                    serialPort1.WriteLine("normalMODE" + Environment.NewLine);
                     break;
                 case "tp_daily_TnA_chart":
                     tapName = "tp_daily_TnA_chart";
+                    serialPort1.WriteLine("normalMODE" + Environment.NewLine);
                     break;
                 case "tp_monthly_TnA_status":
                     tapName = "tp_monthly_TnA_status";
+                    serialPort1.WriteLine("normalMODE" + Environment.NewLine);
                     break;
                 case "tp_monthly_TnA_chart":
                     tapName = "tp_monthly_TnA_chart";
+                    serialPort1.WriteLine("normalMODE" + Environment.NewLine);
                     break;
                 case "tp_department_TnA_status":
                     tapName = "tp_department_TnA_status";
+                    serialPort1.WriteLine("normalMODE" + Environment.NewLine);
                     break;
                 case "tp_employee_registration":
                     tapName = "tp_employee_registration";
@@ -148,7 +167,7 @@ namespace Attendance_Management_Program
             }
         }
 
-        // -------------------------------- end tap control --------------------------------
+        // ---------------------------------------- end tap control ----------------------------------------
 
         // ------------------------------------------- start STM32 -> C# -------------------------------------------
         private void serialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
@@ -158,81 +177,264 @@ namespace Attendance_Management_Program
         }
         private void dataParse(object sender, EventArgs e)
         {
-            if(tapName == "tp_employee_registration")
+            if (tapName == "tp_employee_registration")
             {
                 if (datain.Length != 10)
                 {
                     serialPort1.WriteLine("regFAIL" + Environment.NewLine);
                     return;
                 }
-                sql = "SELECT COUNT(*) AS cnt FROM employee WHERE e_rfid = '";
+                dataParseList.Add("tp_registration");
+            }
+            else
+            {
+                if (datain.Length != 10)
+                {
+                    serialPort1.WriteLine("regFAIL" + Environment.NewLine);
+                    return;
+                }
+                dataParseList.Add("normal_access");
+            }
+        }
+        private void tp_registration()
+        {
+            sql = "SELECT COUNT(*) AS cnt FROM employee WHERE e_rfid = '";
+            sql += datain + "'";
+            int count = -1;
+            try
+            {
+                cmd = new MySqlCommand(sql, conn);
+                count = Convert.ToInt32(cmd.ExecuteScalar());
+            }
+            catch (MySqlException)
+            {
+                MessageBox.Show("employee COUNT(*) query exception !!!");
+            }
+            // RFID already exists -> unregister
+            if (count == 1)
+            {
+                registeMode = false;
+                label_registration_cardEnter.Text = "카드 입력 값 : 등록해제";
+                serialPort1.WriteLine("unregMode" + Environment.NewLine);
+                sql = "SELECT * FROM employee WHERE e_rfid = '";
                 sql += datain + "'";
-                int count = -1;
+                string e_status = "";
+                string e_cf = "";
+                string e_name = "";
+                int e_dm_id = 0;
+                string e_position = "";
+
                 try
                 {
-                    cmd = new MySqlCommand(sql, conn);
-                    count = Convert.ToInt32(cmd.ExecuteScalar());
+                    cmd.CommandText = sql;
+                    reader = cmd.ExecuteReader();
+                    reader.Read();
+
+                    e_status = (string)reader["e_status"];
+                    e_cf = (string)reader["e_cf"];
+                    e_name = (string)reader["e_name"];
+                    e_dm_id = (int)reader["e_dm_id"];
+                    e_position = (string)reader["e_position"];
+
+                    tb_registration_rfid.Text = datain;
+                    tb_registration_status.Text = e_status;
+                    tb_registration_classification.Text = e_cf;
+                    tb_registration_name.Text = e_name;
+                    tb_registration_dm_id.Text = string.Format("{0:D3}", e_dm_id);
+                    tb_registration_position.Text = e_position;
+                    reader.Close();
                 }
                 catch (MySqlException)
                 {
-                    MessageBox.Show("employee COUNT(*) query exception !!!");
+                    MessageBox.Show("employee SELECT * query exception !!!");
                 }
-                // RFID already exists -> unregister
-                if (count == 1)
+            }
+            else
+            { // register
+                registeMode = true;
+                serialPort1.WriteLine("regMode" + Environment.NewLine);
+                label_registration_cardEnter.Text = "카드 입력 값 : 사원등록";
+                tb_registration_rfid.Text = datain;
+                tb_registration_status.Text = "";
+                tb_registration_classification.Text = "";
+                tb_registration_name.Text = "";
+                tb_registration_dm_id.Text = "";
+                tb_registration_position.Text = "";
+            }
+        }
+        private void normal_access()
+        {
+            // Make sure have access rights.
+            sql = "SELECT COUNT(*) AS cnt FROM employee WHERE e_rfid = '";
+            sql += datain + "'";
+            int count = -1;
+            try
+            {
+                cmd = new MySqlCommand(sql, conn);
+                count = Convert.ToInt32(cmd.ExecuteScalar());
+            }
+            catch (MySqlException)
+            {
+                MessageBox.Show("employee COUNT(*) query exception !!!");
+            }
+            if(count < 1)
+            {
+                serialPort1.WriteLine("inAccessible" + Environment.NewLine);
+                return;
+            }
+            // acces rights.
+            // Datetime format
+            DateTime today = DateTime.Now;
+            string H_mm = string.Format("{0:u}", today);
+            string[] split_Date_H_mm = H_mm.Split(' ');
+            string[] split_H_mm = split_Date_H_mm[1].Split(':');
+            string yyyy_MM_dd = DateTime.Now.ToString("yyyy-MM-dd");
+            string w_workonTime = split_H_mm[0] + ":" + split_H_mm[1] + ":00";
+
+            string w_workoncf = "";
+            string w_workoffcf = "";
+
+            count = -1;
+            // work_on ??? work_off ???
+            sql = "SELECT COUNT(*) AS cnt FROM workrecord WHERE w_e_rfid = '";
+            sql += datain + "' AND w_day = '" + yyyy_MM_dd + "'";
+            try
+            {
+                cmd = new MySqlCommand(sql, conn);
+                count = Convert.ToInt32(cmd.ExecuteScalar());
+            }
+            catch (MySqlException)
+            {
+                MessageBox.Show("workrecord COUNT(*) query exception !!!");
+            }
+            // get name, departmentName, position FROM employee TABLE
+            string e_name = "";
+            int e_dm_id = 0;
+            string e_position = "";
+            sql = "SELECT e_name, e_dm_id, e_position FROM employee WHERE e_rfid = '";
+            sql += datain + "'";
+            try
+            {
+                cmd.CommandText = sql;
+                reader = cmd.ExecuteReader();
+                reader.Read();
+                e_name = (string)reader["e_name"];
+                e_dm_id = (int)reader["e_dm_id"];
+                e_position = (string)reader["e_position"];
+                reader.Close();
+            }
+            catch (MySqlException)
+            {
+                MessageBox.Show("employee SELECT e_name, e_dm_id, e_position query exception !!!");
+            }
+            string query = "";
+            // to be late, to leave early
+            TimeSpan late_standard = new TimeSpan(9, 0, 0);
+            TimeSpan leave_standard = new TimeSpan(17, 0, 0);
+            TimeSpan work_on_time = new TimeSpan(int.Parse(split_H_mm[0]), int.Parse(split_H_mm[1]), 0);
+            TimeSpan diff_time = late_standard - work_on_time;
+            if(diff_time.TotalMinutes < 0)
+            {
+                w_workoncf = "지각";
+            }
+            else
+            {
+                w_workoncf = "";
+            }
+            diff_time = leave_standard - work_on_time;
+            if(diff_time.TotalMinutes > 0)
+            {
+                w_workoffcf = "조퇴";
+            }
+            else if(diff_time.TotalMinutes < 0)
+            {
+                w_workoffcf = "연장";
+            }
+            else
+            {
+                w_workoffcf = "";
+            }
+            string w_ew = "";
+            if(diff_time.Hours < 0)
+            {
+                w_ew += (diff_time.Hours * -1);
+            } 
+            else
+            {
+                w_ew += diff_time.Hours;
+            }
+            // work on
+            if (count == 0)
+            {
+                // INSERT INTO workRecord(w_e_rfid, w_dm_id, w_e_name, w_e_position, w_day, w_workonTime, w_workoffTime, w_workoncf, w_workoffcf, w_ew, w_hw, w_tw) 
+                // VALUES('6a703fb491', 7, '김고수', '사원', '2021-05-11', '09:00:00', '17:00:00', NULL, NULL, '00:00:00', '00:00:00', '08:00:00');
+                try
                 {
-                    registeMode = false;
-                    label_registration_cardEnter.Text = "카드 입력 값 : 등록해제";
-                    serialPort1.WriteLine("unregMode" + Environment.NewLine);
-                    sql = "SELECT * FROM employee WHERE e_rfid = '";
-                    sql += datain + "'";
-                    string e_status = "";
-                    string e_cf = "";
-                    string e_name = "";
-                    int e_dm_id = 0;
-                    string e_position = "";
-
-                    try
+                    sql = "INSERT INTO workRecord(w_e_rfid, w_dm_id, w_e_name, w_e_position, w_day, w_workonTime, w_workoffTime, w_workoncf, w_workoffcf, w_ew, w_hw, w_tw) VALUES('";
+                    sql += datain + "', " + e_dm_id + ", '" + e_name + "', '" + e_position + "', '" + yyyy_MM_dd + "', '";
+                    sql += w_workonTime + "', '00:00:00', ";
+                    if(w_workoncf == "")
                     {
-                        cmd.CommandText = sql;
-                        reader = cmd.ExecuteReader();
-                        reader.Read();
-
-                        e_status = (string)reader["e_status"];
-                        e_cf = (string)reader["e_cf"];
-                        e_name = (string)reader["e_name"];
-                        e_dm_id = (int)reader["e_dm_id"];
-                        e_position = (string)reader["e_position"];
-
-                        tb_registration_rfid.Text = datain;
-                        tb_registration_status.Text = e_status;
-                        tb_registration_classification.Text = e_cf;
-                        tb_registration_name.Text = e_name;
-                        tb_registration_dm_id.Text = string.Format("{0:D3}", e_dm_id);
-                        tb_registration_position.Text = e_position;
-                        reader.Close();
+                        sql += "NULL, NULL, '00:00:00', '00:00:00', '00:00:00')";
                     }
-                    catch(MySqlException)
+                    else
                     {
-                        MessageBox.Show("employee SELECT * query exception !!!");
+                        sql += "'" + w_workoncf + "', NULL, '00:00:00', '00:00:00', '00:00:00')";
                     }
+                    cmd.CommandText = sql;
+                    cmd.ExecuteNonQuery();
+                    // recordDGV update
+                    query = "SELECT * FROM workRecord WHERE w_day = '";
+                    query += yyyy_MM_dd + "'";
+                    showRecodDGV(query);
                 }
-                else
-                { // register
-                    registeMode = true;
-                    serialPort1.WriteLine("regMode" + Environment.NewLine);
-                    label_registration_cardEnter.Text = "카드 입력 값 : 사원등록";
-                    tb_registration_rfid.Text = datain;
-                    tb_registration_status.Text = "";
-                    tb_registration_classification.Text = "";
-                    tb_registration_name.Text = "";
-                    tb_registration_dm_id.Text = "";
-                    tb_registration_position.Text = "";
+                catch
+                {
+                    MessageBox.Show("INSERT INTO workRecord query exception !!!");
+                }
+            }
+            else
+            { // work off
+                // UPDATE workrecord SET w_workoffTime = '00:00:00'
+                // WHERE w_e_rfid = '0000000011' AND w_day = '2021-05-11';
+
+                try
+                {
+                    sql = "UPDATE workrecord SET w_workoffTime = '";
+                    sql += w_workonTime + "', ";
+                    sql += w_workonTime + "', '00:00:00', NULL, NULL, '00:00:00', '00:00:00', '00:00:00')";
+                    cmd.CommandText = sql;
+                    cmd.ExecuteNonQuery();
+                    // recordDGV update
+                    query = "SELECT * FROM workRecord WHERE w_day = '";
+                    query += yyyy_MM_dd + "'";
+                    showRecodDGV(query);
+                }
+                catch
+                {
+                    MessageBox.Show("INSERT INTO workRecord query exception !!!");
+                }
+            }
+        }
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (dataParseList.Count > 0)
+            {
+                if (dataParseList[0] == "tp_registration")
+                {
+                    dataParseList.RemoveAt(0);
+                    tp_registration();
+                }
+                else if(dataParseList[0] == "normal_access")
+                {
+                    dataParseList.RemoveAt(0);
+                    normal_access();
                 }
             }
         }
         // ------------------------------------------- end STM32 -> C# -------------------------------------------
 
-        // ------------------------- start list management TAB -------------------------
+        // ---------------------------------------- start list management TAB ----------------------------------------
         private void list_management_list_DataGridViewInit()
         {
             int noIndex = 0;
@@ -252,7 +454,7 @@ namespace Attendance_Management_Program
                     dataGridView1.Rows.Add(++noIndex, dm_name, string.Format("{0:D3}", dm_id));
                 }
             }
-            catch(MySqlException)
+            catch (MySqlException)
             {
                 MessageBox.Show("department init DB Fail !!!");
             }
@@ -264,6 +466,9 @@ namespace Attendance_Management_Program
             dataGridView1.Rows[dataGridView1.Rows.Count - 1].Cells[0].Value = "";
             dataGridView1.Rows[dataGridView1.Rows.Count - 1].Cells[1].Value = "Total " + noIndex;
             dataGridView1.Rows[dataGridView1.Rows.Count - 1].Cells[2].Value = "";
+
+            dataGridView1.Height = dataGridView1.Rows.GetRowsHeight(DataGridViewElementStates.None) + dataGridView1.ColumnHeadersHeight + 2;
+            dataGridView1.Width = dataGridView1.Columns.GetColumnsWidth(DataGridViewElementStates.None) + dataGridView1.RowHeadersWidth + 2;
 
             reader.Close();
         }
@@ -283,6 +488,7 @@ namespace Attendance_Management_Program
                 string e_department = "";
                 string e_position = "";
 
+                dataGridView2.Rows.Clear();
                 // init Rows
                 while (reader.Read())
                 {
@@ -311,11 +517,14 @@ namespace Attendance_Management_Program
             dataGridView2.Rows[dataGridView2.Rows.Count - 1].Cells[4].Value = "";
             dataGridView2.Rows[dataGridView2.Rows.Count - 1].Cells[5].Value = "";
 
+            dataGridView2.Height = dataGridView2.Rows.GetRowsHeight(DataGridViewElementStates.None) + dataGridView2.ColumnHeadersHeight + 2;
+            dataGridView2.Width = dataGridView2.Columns.GetColumnsWidth(DataGridViewElementStates.None) + dataGridView2.RowHeadersWidth + 2;
+
             reader.Close();
         }
-        // ------------------------- end list management TAB -------------------------
+        // ---------------------------------------- end list management TAB ----------------------------------------
 
-        // ------------------------- start recod TAB -------------------------
+        // ---------------------------------------- start recod TAB ----------------------------------------
         private void label3_Paint(object sender, PaintEventArgs e)
         {
             // 3, 10, 11, 12
@@ -401,8 +610,10 @@ namespace Attendance_Management_Program
                 w_tw = (TimeSpan)reader["w_tw"];
                 dgv_record.Rows.Add(w_day.ToString("yyyy-MM-dd"), e_department, w_e_name, w_e_position, w_workonTime.ToString(@"hh\:mm"), w_workoffTime.ToString(@"hh\:mm"), w_workoncf, w_workoffcf, w_ew.ToString(@"hh\:mm"), w_hw.ToString(@"hh\:mm"), w_tw.ToString(@"hh\:mm"));
             }
+            dgv_record.Height = dgv_record.Rows.GetRowsHeight(DataGridViewElementStates.None) + dgv_record.ColumnHeadersHeight + 2;
+            dgv_record.Width = dgv_record.Columns.GetColumnsWidth(DataGridViewElementStates.None) + dgv_record.RowHeadersWidth + 2;
             reader.Close();
-            
+
         }
         private void btn_record_init1_Click(object sender, EventArgs e)
         {
@@ -484,15 +695,58 @@ namespace Attendance_Management_Program
                 showRecodDGV(query);
             }
         }
-        // ------------------------- end recod TAB -------------------------
+        // ---------------------------------------- end recod TAB ----------------------------------------
 
         // ---------------------------------------- start employee registration ----------------------------------------
         private void button1_Click(object sender, EventArgs e)
         { // btn_registration_reg
-            if(!registeMode)
+            if (!registeMode)
             { // unRegistration
                 try
                 {
+                    // retirement table upload
+                    // SELECT w_e_name, w_dm_id, w_e_position, MIN(w_day) AS start_date, 
+                    // MAX(w_day) AS last_date FROM workrecord WHERE w_e_rfid = '6a703fb491';
+                    sql = "SELECT MIN(w_day) AS start_date, MAX(w_day) AS last_date FROM workrecord WHERE w_e_rfid = '";
+                    sql += tb_registration_rfid.Text + "'";
+                    cmd.CommandText = sql;
+                    reader = cmd.ExecuteReader();
+                    reader.Read();
+
+                    string w_e_name = tb_registration_name.Text;
+                    int w_dm_id = int.Parse(tb_registration_dm_id.Text);
+                    string w_e_position = tb_registration_position.Text;
+                    DateTime start_date = (DateTime)reader["start_date"];
+                    DateTime last_date = (DateTime)reader["last_date"];
+                    // period of continuous service calculation 
+                    string str_start_date = start_date.ToString("yyyy-MM-dd");
+                    string str_last_date = last_date.ToString("yyyy-MM-dd");
+                    string[] tokens = str_start_date.Split('-');
+                    DateTime diff_start = new DateTime(int.Parse(tokens[0]), int.Parse(tokens[1]), int.Parse(tokens[2]));
+                    tokens = str_last_date.Split('-');
+                    DateTime diff_last = new DateTime(int.Parse(tokens[0]), int.Parse(tokens[1]), int.Parse(tokens[2]));
+                    TimeSpan dateDiff = last_date - start_date;
+                    int r_twd = (int)dateDiff.TotalDays;
+
+                    reader.Close();
+
+                    // INSERT INTO retirement(r_id, r_name, r_dm_id, r_position, r_wsd, r_ewd, r_twd) 
+                    // VALUES(NULL, '송윤석', '개발팀', '부장', '1998-12-31', '2021-5-7', 8164);
+                    sql = "INSERT INTO retirement(r_name, r_dm_id, r_position, r_wsd, r_ewd, r_twd) VALUES('";
+                    sql += w_e_name + "', '" + department_name[w_dm_id] + "', '";
+                    sql += w_e_position + "', '" + str_start_date + "', '";
+                    sql += str_last_date + "', " + r_twd + ")";
+                    cmd.CommandText = sql;
+                    cmd.ExecuteNonQuery();
+
+                    showRetirementDGV();
+
+                    // delete
+                    sql = "DELETE FROM workrecord WHERE w_e_rfid = '";
+                    sql += tb_registration_rfid.Text + "'";
+                    cmd.CommandText = sql;
+                    cmd.ExecuteNonQuery();
+
                     sql = "DELETE FROM employee WHERE e_rfid = '";
                     sql += tb_registration_rfid.Text + "'";
                     cmd.CommandText = sql;
@@ -506,10 +760,11 @@ namespace Attendance_Management_Program
                     tb_registration_dm_id.Text = "";
                     tb_registration_position.Text = "";
                     serialPort1.WriteLine("unregisterScs" + Environment.NewLine);
-                    dataGridView2.Rows.Clear();
+
                     list_management_employee_DataGridViewInit();
+                    record_search_dgv();
                 }
-                catch(MySqlException)
+                catch (MySqlException)
                 {
                     MessageBox.Show("unRegistration DELETE FAIL !!!");
                 }
@@ -542,12 +797,68 @@ namespace Attendance_Management_Program
                 }
             }
         }
-        //INSERT INTO employee(e_rfid, e_status, e_cf, e_name, e_dm_id, e_position) 
-        //VALUES('0000000000', '재직', '정규직', '이기훈', 0, '대표이사');
+        private void tp_employee_registration_Paint(object sender, PaintEventArgs e)
+        {
+            tb_registration_classification.BorderStyle = BorderStyle.None;
+            Pen p = new Pen(Color.DodgerBlue);
+            Graphics g = e.Graphics;
+            int variance = 3;
+            g.DrawRectangle(p, new Rectangle(tb_registration_classification.Location.X - variance, tb_registration_classification.Location.Y - variance, tb_registration_classification.Width + variance, tb_registration_classification.Height + variance));
+
+            tb_registration_dm_id.BorderStyle = BorderStyle.None;
+            Graphics g2 = e.Graphics;
+            g2.DrawRectangle(p, new Rectangle(tb_registration_dm_id.Location.X - variance, tb_registration_dm_id.Location.Y - variance, tb_registration_dm_id.Width + variance, tb_registration_dm_id.Height + variance));
+
+            tb_registration_name.BorderStyle = BorderStyle.None;
+            Graphics g3 = e.Graphics;
+            g3.DrawRectangle(p, new Rectangle(tb_registration_name.Location.X - variance, tb_registration_name.Location.Y - variance, tb_registration_name.Width + variance, tb_registration_name.Height + variance));
+
+            tb_registration_position.BorderStyle = BorderStyle.None;
+            Graphics g4 = e.Graphics;
+            g4.DrawRectangle(p, new Rectangle(tb_registration_position.Location.X - variance, tb_registration_position.Location.Y - variance, tb_registration_position.Width + variance, tb_registration_position.Height + variance));
+
+            tb_registration_rfid.BorderStyle = BorderStyle.None;
+            Graphics g5 = e.Graphics;
+            g5.DrawRectangle(p, new Rectangle(tb_registration_rfid.Location.X - variance, tb_registration_rfid.Location.Y - variance, tb_registration_rfid.Width + variance, tb_registration_rfid.Height + variance));
+
+            tb_registration_status.BorderStyle = BorderStyle.None;
+            Graphics g6 = e.Graphics;
+            g6.DrawRectangle(p, new Rectangle(tb_registration_status.Location.X - variance, tb_registration_status.Location.Y - variance, tb_registration_status.Width + variance, tb_registration_status.Height + variance));
+        }
+
+        private void showRetirementDGV()
+        {
+            sql = "SELECT * FROM retirement";
+            cmd.CommandText = sql;
+            reader = cmd.ExecuteReader();
+
+            string r_name = "";
+            string r_dm_id = "";
+            string r_position = "";
+            DateTime r_wsd = new DateTime();
+            DateTime r_ewd = new DateTime();
+            int r_twd = 0;
+
+            dgv_retirement.Rows.Clear();
+
+            while (reader.Read())
+            {
+                r_name = (string)reader["r_name"];
+                r_dm_id = (string)reader["r_dm_id"];
+                r_position = (string)reader["r_position"];
+                r_wsd = (DateTime)reader["r_wsd"];
+                r_ewd = (DateTime)reader["r_ewd"];
+                r_twd = (int)reader["r_twd"];
+                dgv_retirement.Rows.Add(r_name, r_dm_id, r_position, r_wsd.ToString("yyyy-MM-dd"), r_ewd.ToString("yyyy-MM-dd"), r_twd);
+            }
+            dgv_retirement.Height = dgv_retirement.Rows.GetRowsHeight(DataGridViewElementStates.None) + dgv_retirement.ColumnHeadersHeight + 2;
+            dgv_retirement.Width = dgv_retirement.Columns.GetColumnsWidth(DataGridViewElementStates.None) + dgv_retirement.RowHeadersWidth + 2;
+            reader.Close();
+        }
 
         // ---------------------------------------- end employee registration ----------------------------------------
 
-        // ------------------------- start menu design -------------------------
+        // ---------------------------------------- start menu design ----------------------------------------
         private List<Label> menu;
 
         private void setMenuChgane(int index)
@@ -594,13 +905,13 @@ namespace Attendance_Management_Program
         {
             setMenuChgane(7);
         }
-        // ------------------------- end menu design -------------------------
+        // ---------------------------------------- end menu design ----------------------------------------
 
         // Reference address
         // https://program-day.tistory.com/18
         // https://blog.naver.com/r8jang/221624822165
 
-        // ------------------------- start click miss ------------------------- 
+        // ---------------------------------------- start click miss ---------------------------------------- 
         private void label1_Click(object sender, EventArgs e)
         {
 
@@ -611,9 +922,9 @@ namespace Attendance_Management_Program
         }
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
-            
+
         }
 
-        // ------------------------- end click miss -------------------------
+        // ---------------------------------------- end click miss ----------------------------------------
     }
 }
