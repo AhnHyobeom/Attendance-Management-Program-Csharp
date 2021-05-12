@@ -30,27 +30,35 @@ namespace Attendance_Management_Program
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle56 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle57 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle58 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle59 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle60 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle61 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle62 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle63 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle64 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle65 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle66 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle67 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle68 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle69 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle70 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle71 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle72 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle73 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle74 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle75 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle51 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle52 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle53 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle54 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle55 = new System.Windows.Forms.DataGridViewCellStyle();
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.label_main_top_left = new System.Windows.Forms.Label();
             this.Tab_Back = new System.Windows.Forms.Panel();
@@ -58,7 +66,6 @@ namespace Attendance_Management_Program
             this.Tab_Menu_Select_Back = new System.Windows.Forms.Panel();
             this.Tab_Menu_Select_Bar = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.btn_daily_TnA_status = new System.Windows.Forms.Label();
             this.btn_daily_TnA_chart = new System.Windows.Forms.Label();
             this.btn_record = new System.Windows.Forms.Label();
             this.btn_monthly_TnA_status = new System.Windows.Forms.Label();
@@ -87,12 +94,8 @@ namespace Attendance_Management_Program
             this.label10 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.dgv_record = new System.Windows.Forms.DataGridView();
-            this.tp_daily_TnA_status = new System.Windows.Forms.TabPage();
-            this.label9 = new System.Windows.Forms.Label();
             this.tp_daily_TnA_chart = new System.Windows.Forms.TabPage();
-            this.label4 = new System.Windows.Forms.Label();
             this.tp_monthly_TnA_status = new System.Windows.Forms.TabPage();
-            this.label6 = new System.Windows.Forms.Label();
             this.tp_monthly_TnA_chart = new System.Windows.Forms.TabPage();
             this.label5 = new System.Windows.Forms.Label();
             this.tp_department_TnA_status = new System.Windows.Forms.TabPage();
@@ -117,6 +120,20 @@ namespace Attendance_Management_Program
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.dgv_retirement = new System.Windows.Forms.DataGridView();
             this.label14 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.daily_chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.label_monthly_search = new System.Windows.Forms.Label();
+            this.btn_monthly_init2 = new System.Windows.Forms.Button();
+            this.btn_monthly_init1 = new System.Windows.Forms.Button();
+            this.tb_monthly_dpName = new System.Windows.Forms.TextBox();
+            this.tb_monthly_month = new System.Windows.Forms.TextBox();
+            this.tb_monthly_year = new System.Windows.Forms.TextBox();
+            this.btn_monthly_search2 = new System.Windows.Forms.Button();
+            this.btn_monthly_search1 = new System.Windows.Forms.Button();
+            this.label21 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
+            this.dgv_monthly = new System.Windows.Forms.DataGridView();
             this.Tab_Back.SuspendLayout();
             this.Tab_Menu_Back.SuspendLayout();
             this.Tab_Menu_Select_Back.SuspendLayout();
@@ -126,13 +143,14 @@ namespace Attendance_Management_Program
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tp_record.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_record)).BeginInit();
-            this.tp_daily_TnA_status.SuspendLayout();
             this.tp_daily_TnA_chart.SuspendLayout();
             this.tp_monthly_TnA_status.SuspendLayout();
             this.tp_monthly_TnA_chart.SuspendLayout();
             this.tp_department_TnA_status.SuspendLayout();
             this.tp_employee_registration.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_retirement)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.daily_chart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_monthly)).BeginInit();
             this.SuspendLayout();
             // 
             // serialPort1
@@ -170,7 +188,6 @@ namespace Attendance_Management_Program
             this.Tab_Menu_Back.BackColor = System.Drawing.Color.DodgerBlue;
             this.Tab_Menu_Back.Controls.Add(this.Tab_Menu_Select_Back);
             this.Tab_Menu_Back.Controls.Add(this.panel1);
-            this.Tab_Menu_Back.Controls.Add(this.btn_daily_TnA_status);
             this.Tab_Menu_Back.Controls.Add(this.btn_daily_TnA_chart);
             this.Tab_Menu_Back.Controls.Add(this.btn_record);
             this.Tab_Menu_Back.Controls.Add(this.btn_monthly_TnA_status);
@@ -209,25 +226,12 @@ namespace Attendance_Management_Program
             this.panel1.Size = new System.Drawing.Size(1176, 10);
             this.panel1.TabIndex = 1;
             // 
-            // btn_daily_TnA_status
-            // 
-            this.btn_daily_TnA_status.BackColor = System.Drawing.Color.DodgerBlue;
-            this.btn_daily_TnA_status.Font = new System.Drawing.Font("Arial", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_daily_TnA_status.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(111)))), ((int)(((byte)(111)))));
-            this.btn_daily_TnA_status.Location = new System.Drawing.Point(220, 0);
-            this.btn_daily_TnA_status.Name = "btn_daily_TnA_status";
-            this.btn_daily_TnA_status.Size = new System.Drawing.Size(150, 37);
-            this.btn_daily_TnA_status.TabIndex = 3;
-            this.btn_daily_TnA_status.Text = "일일 근태현황";
-            this.btn_daily_TnA_status.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.btn_daily_TnA_status.Click += new System.EventHandler(this.btn_daily_TnA_status_Click);
-            // 
             // btn_daily_TnA_chart
             // 
             this.btn_daily_TnA_chart.BackColor = System.Drawing.Color.DodgerBlue;
             this.btn_daily_TnA_chart.Font = new System.Drawing.Font("Arial", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_daily_TnA_chart.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(111)))), ((int)(((byte)(111)))));
-            this.btn_daily_TnA_chart.Location = new System.Drawing.Point(370, 0);
+            this.btn_daily_TnA_chart.Location = new System.Drawing.Point(220, 0);
             this.btn_daily_TnA_chart.Name = "btn_daily_TnA_chart";
             this.btn_daily_TnA_chart.Size = new System.Drawing.Size(150, 37);
             this.btn_daily_TnA_chart.TabIndex = 4;
@@ -253,7 +257,7 @@ namespace Attendance_Management_Program
             this.btn_monthly_TnA_status.BackColor = System.Drawing.Color.DodgerBlue;
             this.btn_monthly_TnA_status.Font = new System.Drawing.Font("Arial", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_monthly_TnA_status.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(111)))), ((int)(((byte)(111)))));
-            this.btn_monthly_TnA_status.Location = new System.Drawing.Point(520, 0);
+            this.btn_monthly_TnA_status.Location = new System.Drawing.Point(370, 0);
             this.btn_monthly_TnA_status.Name = "btn_monthly_TnA_status";
             this.btn_monthly_TnA_status.Size = new System.Drawing.Size(150, 37);
             this.btn_monthly_TnA_status.TabIndex = 5;
@@ -266,7 +270,7 @@ namespace Attendance_Management_Program
             this.btn_monthly_TnA_chart.BackColor = System.Drawing.Color.DodgerBlue;
             this.btn_monthly_TnA_chart.Font = new System.Drawing.Font("Arial", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_monthly_TnA_chart.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(111)))), ((int)(((byte)(111)))));
-            this.btn_monthly_TnA_chart.Location = new System.Drawing.Point(670, 0);
+            this.btn_monthly_TnA_chart.Location = new System.Drawing.Point(520, 0);
             this.btn_monthly_TnA_chart.Name = "btn_monthly_TnA_chart";
             this.btn_monthly_TnA_chart.Size = new System.Drawing.Size(150, 37);
             this.btn_monthly_TnA_chart.TabIndex = 6;
@@ -279,7 +283,7 @@ namespace Attendance_Management_Program
             this.btn_department_TnA_status.BackColor = System.Drawing.Color.DodgerBlue;
             this.btn_department_TnA_status.Font = new System.Drawing.Font("Arial", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_department_TnA_status.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(111)))), ((int)(((byte)(111)))));
-            this.btn_department_TnA_status.Location = new System.Drawing.Point(820, 0);
+            this.btn_department_TnA_status.Location = new System.Drawing.Point(670, 0);
             this.btn_department_TnA_status.Name = "btn_department_TnA_status";
             this.btn_department_TnA_status.Size = new System.Drawing.Size(180, 37);
             this.btn_department_TnA_status.TabIndex = 7;
@@ -292,7 +296,7 @@ namespace Attendance_Management_Program
             this.btn_employee_registration.BackColor = System.Drawing.Color.DodgerBlue;
             this.btn_employee_registration.Font = new System.Drawing.Font("Arial", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_employee_registration.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(111)))), ((int)(((byte)(111)))));
-            this.btn_employee_registration.Location = new System.Drawing.Point(1000, 0);
+            this.btn_employee_registration.Location = new System.Drawing.Point(850, 0);
             this.btn_employee_registration.Name = "btn_employee_registration";
             this.btn_employee_registration.Size = new System.Drawing.Size(170, 37);
             this.btn_employee_registration.TabIndex = 8;
@@ -316,7 +320,6 @@ namespace Attendance_Management_Program
             // 
             this.tabControl1.Controls.Add(this.tp_list_management);
             this.tabControl1.Controls.Add(this.tp_record);
-            this.tabControl1.Controls.Add(this.tp_daily_TnA_status);
             this.tabControl1.Controls.Add(this.tp_daily_TnA_chart);
             this.tabControl1.Controls.Add(this.tp_monthly_TnA_status);
             this.tabControl1.Controls.Add(this.tp_monthly_TnA_chart);
@@ -348,44 +351,44 @@ namespace Attendance_Management_Program
             // 
             // dataGridView2
             // 
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(239)))), ((int)(((byte)(249)))));
-            this.dataGridView2.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle56.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(239)))), ((int)(((byte)(249)))));
+            this.dataGridView2.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle56;
             this.dataGridView2.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dataGridView2.BackgroundColor = System.Drawing.Color.White;
             this.dataGridView2.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dataGridView2.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
             this.dataGridView2.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(25)))), ((int)(((byte)(72)))));
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView2.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle57.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle57.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(25)))), ((int)(((byte)(72)))));
+            dataGridViewCellStyle57.Font = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle57.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle57.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle57.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle57.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView2.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle57;
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.DarkTurquoise;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.WhiteSmoke;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView2.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle58.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle58.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle58.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            dataGridViewCellStyle58.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle58.SelectionBackColor = System.Drawing.Color.DarkTurquoise;
+            dataGridViewCellStyle58.SelectionForeColor = System.Drawing.Color.WhiteSmoke;
+            dataGridViewCellStyle58.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView2.DefaultCellStyle = dataGridViewCellStyle58;
             this.dataGridView2.EnableHeadersVisualStyles = false;
             this.dataGridView2.Location = new System.Drawing.Point(573, 174);
             this.dataGridView2.Name = "dataGridView2";
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("맑은 고딕", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView2.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle59.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle59.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle59.Font = new System.Drawing.Font("맑은 고딕", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            dataGridViewCellStyle59.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle59.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle59.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle59.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView2.RowHeadersDefaultCellStyle = dataGridViewCellStyle59;
             this.dataGridView2.RowHeadersWidth = 51;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("맑은 고딕", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.dataGridView2.RowsDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle60.Font = new System.Drawing.Font("맑은 고딕", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.dataGridView2.RowsDefaultCellStyle = dataGridViewCellStyle60;
             this.dataGridView2.RowTemplate.Height = 27;
             this.dataGridView2.Size = new System.Drawing.Size(526, 415);
             this.dataGridView2.TabIndex = 3;
@@ -405,44 +408,44 @@ namespace Attendance_Management_Program
             // 
             // dataGridView1
             // 
-            dataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(239)))), ((int)(((byte)(249)))));
-            this.dataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle61.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(239)))), ((int)(((byte)(249)))));
+            this.dataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle61;
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dataGridView1.BackgroundColor = System.Drawing.Color.White;
             this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dataGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
             this.dataGridView1.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(25)))), ((int)(((byte)(72)))));
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle62.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle62.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(25)))), ((int)(((byte)(72)))));
+            dataGridViewCellStyle62.Font = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle62.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle62.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle62.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle62.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle62;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.DarkTurquoise;
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.Color.WhiteSmoke;
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle63.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle63.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle63.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            dataGridViewCellStyle63.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle63.SelectionBackColor = System.Drawing.Color.DarkTurquoise;
+            dataGridViewCellStyle63.SelectionForeColor = System.Drawing.Color.WhiteSmoke;
+            dataGridViewCellStyle63.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle63;
             this.dataGridView1.EnableHeadersVisualStyles = false;
             this.dataGridView1.Location = new System.Drawing.Point(79, 174);
             this.dataGridView1.Name = "dataGridView1";
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("맑은 고딕", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle64.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle64.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle64.Font = new System.Drawing.Font("맑은 고딕", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            dataGridViewCellStyle64.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle64.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle64.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle64.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle64;
             this.dataGridView1.RowHeadersWidth = 51;
-            dataGridViewCellStyle10.Font = new System.Drawing.Font("맑은 고딕", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle65.Font = new System.Drawing.Font("맑은 고딕", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle65;
             this.dataGridView1.RowTemplate.Height = 27;
             this.dataGridView1.Size = new System.Drawing.Size(381, 387);
             this.dataGridView1.TabIndex = 1;
@@ -672,72 +675,51 @@ namespace Attendance_Management_Program
             // 
             // dgv_record
             // 
-            dataGridViewCellStyle11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(239)))), ((int)(((byte)(249)))));
-            this.dgv_record.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle66.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(239)))), ((int)(((byte)(249)))));
+            this.dgv_record.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle66;
             this.dgv_record.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dgv_record.BackgroundColor = System.Drawing.Color.White;
             this.dgv_record.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgv_record.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
             this.dgv_record.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle12.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(25)))), ((int)(((byte)(72)))));
-            dataGridViewCellStyle12.Font = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle12.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgv_record.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle67.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle67.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(25)))), ((int)(((byte)(72)))));
+            dataGridViewCellStyle67.Font = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle67.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle67.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle67.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle67.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgv_record.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle67;
             this.dgv_record.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle13.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle13.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            dataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle13.SelectionBackColor = System.Drawing.Color.DarkTurquoise;
-            dataGridViewCellStyle13.SelectionForeColor = System.Drawing.Color.WhiteSmoke;
-            dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgv_record.DefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle68.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle68.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle68.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            dataGridViewCellStyle68.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle68.SelectionBackColor = System.Drawing.Color.DarkTurquoise;
+            dataGridViewCellStyle68.SelectionForeColor = System.Drawing.Color.WhiteSmoke;
+            dataGridViewCellStyle68.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgv_record.DefaultCellStyle = dataGridViewCellStyle68;
             this.dgv_record.EnableHeadersVisualStyles = false;
             this.dgv_record.Location = new System.Drawing.Point(27, 192);
             this.dgv_record.Name = "dgv_record";
-            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle14.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle14.Font = new System.Drawing.Font("맑은 고딕", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            dataGridViewCellStyle14.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle14.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle14.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgv_record.RowHeadersDefaultCellStyle = dataGridViewCellStyle14;
+            dataGridViewCellStyle69.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle69.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle69.Font = new System.Drawing.Font("맑은 고딕", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            dataGridViewCellStyle69.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle69.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle69.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle69.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgv_record.RowHeadersDefaultCellStyle = dataGridViewCellStyle69;
             this.dgv_record.RowHeadersWidth = 51;
-            dataGridViewCellStyle15.Font = new System.Drawing.Font("맑은 고딕", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.dgv_record.RowsDefaultCellStyle = dataGridViewCellStyle15;
+            dataGridViewCellStyle70.Font = new System.Drawing.Font("맑은 고딕", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.dgv_record.RowsDefaultCellStyle = dataGridViewCellStyle70;
             this.dgv_record.RowTemplate.Height = 27;
             this.dgv_record.Size = new System.Drawing.Size(1120, 466);
             this.dgv_record.TabIndex = 5;
             // 
-            // tp_daily_TnA_status
-            // 
-            this.tp_daily_TnA_status.Controls.Add(this.label9);
-            this.tp_daily_TnA_status.Location = new System.Drawing.Point(4, 25);
-            this.tp_daily_TnA_status.Margin = new System.Windows.Forms.Padding(2);
-            this.tp_daily_TnA_status.Name = "tp_daily_TnA_status";
-            this.tp_daily_TnA_status.Size = new System.Drawing.Size(1169, 678);
-            this.tp_daily_TnA_status.TabIndex = 2;
-            this.tp_daily_TnA_status.Text = "tabPage3";
-            this.tp_daily_TnA_status.UseVisualStyleBackColor = true;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("굴림", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label9.Location = new System.Drawing.Point(10, 16);
-            this.label9.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(210, 30);
-            this.label9.TabIndex = 5;
-            this.label9.Text = "일일 근태현황";
-            // 
             // tp_daily_TnA_chart
             // 
+            this.tp_daily_TnA_chart.Controls.Add(this.daily_chart);
             this.tp_daily_TnA_chart.Controls.Add(this.label4);
             this.tp_daily_TnA_chart.Location = new System.Drawing.Point(4, 25);
             this.tp_daily_TnA_chart.Margin = new System.Windows.Forms.Padding(2);
@@ -747,20 +729,20 @@ namespace Attendance_Management_Program
             this.tp_daily_TnA_chart.Text = "tabPage4";
             this.tp_daily_TnA_chart.UseVisualStyleBackColor = true;
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("굴림", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label4.Location = new System.Drawing.Point(10, 29);
-            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(199, 30);
-            this.label4.TabIndex = 2;
-            this.label4.Text = "일일근태차트";
-            // 
             // tp_monthly_TnA_status
             // 
-            this.tp_monthly_TnA_status.Controls.Add(this.label6);
+            this.tp_monthly_TnA_status.Controls.Add(this.label_monthly_search);
+            this.tp_monthly_TnA_status.Controls.Add(this.btn_monthly_init2);
+            this.tp_monthly_TnA_status.Controls.Add(this.btn_monthly_init1);
+            this.tp_monthly_TnA_status.Controls.Add(this.tb_monthly_dpName);
+            this.tp_monthly_TnA_status.Controls.Add(this.tb_monthly_month);
+            this.tp_monthly_TnA_status.Controls.Add(this.tb_monthly_year);
+            this.tp_monthly_TnA_status.Controls.Add(this.btn_monthly_search2);
+            this.tp_monthly_TnA_status.Controls.Add(this.btn_monthly_search1);
+            this.tp_monthly_TnA_status.Controls.Add(this.label21);
+            this.tp_monthly_TnA_status.Controls.Add(this.label22);
+            this.tp_monthly_TnA_status.Controls.Add(this.label23);
+            this.tp_monthly_TnA_status.Controls.Add(this.dgv_monthly);
             this.tp_monthly_TnA_status.Location = new System.Drawing.Point(4, 25);
             this.tp_monthly_TnA_status.Margin = new System.Windows.Forms.Padding(2);
             this.tp_monthly_TnA_status.Name = "tp_monthly_TnA_status";
@@ -768,17 +750,7 @@ namespace Attendance_Management_Program
             this.tp_monthly_TnA_status.TabIndex = 4;
             this.tp_monthly_TnA_status.Text = "tabPage5";
             this.tp_monthly_TnA_status.UseVisualStyleBackColor = true;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("굴림", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.label6.Location = new System.Drawing.Point(10, 16);
-            this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(210, 30);
-            this.label6.TabIndex = 4;
-            this.label6.Text = "월별 근태현황";
+            this.tp_monthly_TnA_status.Paint += new System.Windows.Forms.PaintEventHandler(this.tp_monthly_TnA_status_Paint);
             // 
             // tp_monthly_TnA_chart
             // 
@@ -1073,44 +1045,44 @@ namespace Attendance_Management_Program
             // 
             // dgv_retirement
             // 
-            dataGridViewCellStyle16.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(239)))), ((int)(((byte)(249)))));
-            this.dgv_retirement.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle16;
+            dataGridViewCellStyle71.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(239)))), ((int)(((byte)(249)))));
+            this.dgv_retirement.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle71;
             this.dgv_retirement.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dgv_retirement.BackgroundColor = System.Drawing.Color.White;
             this.dgv_retirement.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgv_retirement.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
             this.dgv_retirement.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle17.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(25)))), ((int)(((byte)(72)))));
-            dataGridViewCellStyle17.Font = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle17.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle17.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle17.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgv_retirement.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle17;
+            dataGridViewCellStyle72.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle72.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(25)))), ((int)(((byte)(72)))));
+            dataGridViewCellStyle72.Font = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle72.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle72.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle72.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle72.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgv_retirement.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle72;
             this.dgv_retirement.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle18.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle18.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            dataGridViewCellStyle18.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle18.SelectionBackColor = System.Drawing.Color.DarkTurquoise;
-            dataGridViewCellStyle18.SelectionForeColor = System.Drawing.Color.WhiteSmoke;
-            dataGridViewCellStyle18.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgv_retirement.DefaultCellStyle = dataGridViewCellStyle18;
+            dataGridViewCellStyle73.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle73.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle73.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            dataGridViewCellStyle73.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle73.SelectionBackColor = System.Drawing.Color.DarkTurquoise;
+            dataGridViewCellStyle73.SelectionForeColor = System.Drawing.Color.WhiteSmoke;
+            dataGridViewCellStyle73.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgv_retirement.DefaultCellStyle = dataGridViewCellStyle73;
             this.dgv_retirement.EnableHeadersVisualStyles = false;
             this.dgv_retirement.Location = new System.Drawing.Point(579, 154);
             this.dgv_retirement.Name = "dgv_retirement";
-            dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle19.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle19.Font = new System.Drawing.Font("맑은 고딕", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            dataGridViewCellStyle19.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle19.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle19.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle19.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgv_retirement.RowHeadersDefaultCellStyle = dataGridViewCellStyle19;
+            dataGridViewCellStyle74.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle74.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle74.Font = new System.Drawing.Font("맑은 고딕", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            dataGridViewCellStyle74.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle74.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle74.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle74.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgv_retirement.RowHeadersDefaultCellStyle = dataGridViewCellStyle74;
             this.dgv_retirement.RowHeadersWidth = 51;
-            dataGridViewCellStyle20.Font = new System.Drawing.Font("맑은 고딕", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.dgv_retirement.RowsDefaultCellStyle = dataGridViewCellStyle20;
+            dataGridViewCellStyle75.Font = new System.Drawing.Font("맑은 고딕", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.dgv_retirement.RowsDefaultCellStyle = dataGridViewCellStyle75;
             this.dgv_retirement.RowTemplate.Height = 27;
             this.dgv_retirement.Size = new System.Drawing.Size(561, 413);
             this.dgv_retirement.TabIndex = 33;
@@ -1127,6 +1099,243 @@ namespace Attendance_Management_Program
             this.label14.Size = new System.Drawing.Size(203, 28);
             this.label14.TabIndex = 34;
             this.label14.Text = "■ 퇴사자 명단";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Arial", 19.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.Color.DimGray;
+            this.label4.Location = new System.Drawing.Point(464, 63);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(344, 40);
+            this.label4.TabIndex = 4;
+            this.label4.Text = "■ 일일 총 근무 시간 현황";
+            // 
+            // daily_chart
+            // 
+            chartArea3.AxisX.IsLabelAutoFit = false;
+            chartArea3.AxisX.LabelStyle.Font = new System.Drawing.Font("Arial", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            chartArea3.AxisX.LabelStyle.ForeColor = System.Drawing.Color.DarkSlateGray;
+            chartArea3.AxisY.IsLabelAutoFit = false;
+            chartArea3.AxisY.LabelStyle.Font = new System.Drawing.Font("Arial", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            chartArea3.AxisY.LabelStyle.ForeColor = System.Drawing.Color.DodgerBlue;
+            chartArea3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            chartArea3.Name = "ChartArea1";
+            this.daily_chart.ChartAreas.Add(chartArea3);
+            legend3.Name = "Legend1";
+            this.daily_chart.Legends.Add(legend3);
+            this.daily_chart.Location = new System.Drawing.Point(55, 134);
+            this.daily_chart.Name = "daily_chart";
+            series3.ChartArea = "ChartArea1";
+            series3.IsVisibleInLegend = false;
+            series3.Legend = "Legend1";
+            series3.Name = "Series1";
+            this.daily_chart.Series.Add(series3);
+            this.daily_chart.Size = new System.Drawing.Size(1057, 511);
+            this.daily_chart.TabIndex = 5;
+            this.daily_chart.Text = "chart1";
+            // 
+            // label_monthly_search
+            // 
+            this.label_monthly_search.AutoSize = true;
+            this.label_monthly_search.Font = new System.Drawing.Font("Arial", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_monthly_search.ForeColor = System.Drawing.Color.DimGray;
+            this.label_monthly_search.Location = new System.Drawing.Point(26, 123);
+            this.label_monthly_search.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label_monthly_search.Name = "label_monthly_search";
+            this.label_monthly_search.Size = new System.Drawing.Size(287, 33);
+            this.label_monthly_search.TabIndex = 18;
+            this.label_monthly_search.Text = "검색 내용 : 2021-05-10";
+            // 
+            // btn_monthly_init2
+            // 
+            this.btn_monthly_init2.BackColor = System.Drawing.Color.White;
+            this.btn_monthly_init2.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.btn_monthly_init2.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.btn_monthly_init2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.btn_monthly_init2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_monthly_init2.Font = new System.Drawing.Font("Arial", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_monthly_init2.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.btn_monthly_init2.Location = new System.Drawing.Point(788, 52);
+            this.btn_monthly_init2.Name = "btn_monthly_init2";
+            this.btn_monthly_init2.Size = new System.Drawing.Size(129, 43);
+            this.btn_monthly_init2.TabIndex = 31;
+            this.btn_monthly_init2.Text = "원래대로";
+            this.btn_monthly_init2.UseVisualStyleBackColor = false;
+            this.btn_monthly_init2.Click += new System.EventHandler(this.btn_monthly_init2_Click);
+            // 
+            // btn_monthly_init1
+            // 
+            this.btn_monthly_init1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(36)))), ((int)(((byte)(37)))));
+            this.btn_monthly_init1.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.btn_monthly_init1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.btn_monthly_init1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.btn_monthly_init1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_monthly_init1.Image = ((System.Drawing.Image)(resources.GetObject("btn_monthly_init1.Image")));
+            this.btn_monthly_init1.Location = new System.Drawing.Point(733, 52);
+            this.btn_monthly_init1.Name = "btn_monthly_init1";
+            this.btn_monthly_init1.Size = new System.Drawing.Size(55, 43);
+            this.btn_monthly_init1.TabIndex = 30;
+            this.btn_monthly_init1.UseVisualStyleBackColor = false;
+            this.btn_monthly_init1.Click += new System.EventHandler(this.btn_monthly_init1_Click);
+            // 
+            // tb_monthly_dpName
+            // 
+            this.tb_monthly_dpName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tb_monthly_dpName.Font = new System.Drawing.Font("Arial", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tb_monthly_dpName.Location = new System.Drawing.Point(282, 64);
+            this.tb_monthly_dpName.Multiline = true;
+            this.tb_monthly_dpName.Name = "tb_monthly_dpName";
+            this.tb_monthly_dpName.Size = new System.Drawing.Size(128, 31);
+            this.tb_monthly_dpName.TabIndex = 26;
+            this.tb_monthly_dpName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // tb_monthly_month
+            // 
+            this.tb_monthly_month.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tb_monthly_month.Font = new System.Drawing.Font("Arial", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tb_monthly_month.Location = new System.Drawing.Point(153, 64);
+            this.tb_monthly_month.Multiline = true;
+            this.tb_monthly_month.Name = "tb_monthly_month";
+            this.tb_monthly_month.Size = new System.Drawing.Size(128, 31);
+            this.tb_monthly_month.TabIndex = 25;
+            this.tb_monthly_month.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // tb_monthly_year
+            // 
+            this.tb_monthly_year.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tb_monthly_year.Font = new System.Drawing.Font("Arial", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tb_monthly_year.Location = new System.Drawing.Point(24, 64);
+            this.tb_monthly_year.Multiline = true;
+            this.tb_monthly_year.Name = "tb_monthly_year";
+            this.tb_monthly_year.Size = new System.Drawing.Size(128, 31);
+            this.tb_monthly_year.TabIndex = 24;
+            this.tb_monthly_year.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // btn_monthly_search2
+            // 
+            this.btn_monthly_search2.BackColor = System.Drawing.Color.White;
+            this.btn_monthly_search2.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.btn_monthly_search2.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.btn_monthly_search2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.btn_monthly_search2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_monthly_search2.Font = new System.Drawing.Font("Arial", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_monthly_search2.ForeColor = System.Drawing.Color.DodgerBlue;
+            this.btn_monthly_search2.Location = new System.Drawing.Point(576, 52);
+            this.btn_monthly_search2.Name = "btn_monthly_search2";
+            this.btn_monthly_search2.Size = new System.Drawing.Size(129, 43);
+            this.btn_monthly_search2.TabIndex = 29;
+            this.btn_monthly_search2.Text = "검색하기";
+            this.btn_monthly_search2.UseVisualStyleBackColor = false;
+            this.btn_monthly_search2.Click += new System.EventHandler(this.btn_monthly_search2_Click);
+            // 
+            // btn_monthly_search1
+            // 
+            this.btn_monthly_search1.BackColor = System.Drawing.Color.DodgerBlue;
+            this.btn_monthly_search1.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.btn_monthly_search1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.btn_monthly_search1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.btn_monthly_search1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_monthly_search1.Image = ((System.Drawing.Image)(resources.GetObject("btn_monthly_search1.Image")));
+            this.btn_monthly_search1.Location = new System.Drawing.Point(521, 52);
+            this.btn_monthly_search1.Name = "btn_monthly_search1";
+            this.btn_monthly_search1.Size = new System.Drawing.Size(55, 43);
+            this.btn_monthly_search1.TabIndex = 28;
+            this.btn_monthly_search1.UseVisualStyleBackColor = false;
+            this.btn_monthly_search1.Click += new System.EventHandler(this.btn_monthly_search1_Click);
+            // 
+            // label21
+            // 
+            this.label21.BackColor = System.Drawing.Color.DodgerBlue;
+            this.label21.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.label21.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.label21.Font = new System.Drawing.Font("Arial", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label21.ForeColor = System.Drawing.Color.White;
+            this.label21.Location = new System.Drawing.Point(281, 31);
+            this.label21.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(130, 33);
+            this.label21.TabIndex = 22;
+            this.label21.Text = "부서명";
+            this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label21.Paint += new System.Windows.Forms.PaintEventHandler(this.label23_Paint);
+            // 
+            // label22
+            // 
+            this.label22.BackColor = System.Drawing.Color.DodgerBlue;
+            this.label22.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.label22.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.label22.Font = new System.Drawing.Font("Arial", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label22.ForeColor = System.Drawing.Color.White;
+            this.label22.Location = new System.Drawing.Point(152, 31);
+            this.label22.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(130, 33);
+            this.label22.TabIndex = 21;
+            this.label22.Text = "기준 월";
+            this.label22.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label22.Paint += new System.Windows.Forms.PaintEventHandler(this.label23_Paint);
+            // 
+            // label23
+            // 
+            this.label23.BackColor = System.Drawing.Color.DodgerBlue;
+            this.label23.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.label23.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.label23.Font = new System.Drawing.Font("Arial", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label23.ForeColor = System.Drawing.Color.White;
+            this.label23.Location = new System.Drawing.Point(23, 31);
+            this.label23.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(130, 33);
+            this.label23.TabIndex = 20;
+            this.label23.Text = "기준연도";
+            this.label23.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label23.Paint += new System.Windows.Forms.PaintEventHandler(this.label23_Paint);
+            // 
+            // dgv_monthly
+            // 
+            dataGridViewCellStyle51.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(239)))), ((int)(((byte)(249)))));
+            this.dgv_monthly.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle51;
+            this.dgv_monthly.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dgv_monthly.BackgroundColor = System.Drawing.Color.White;
+            this.dgv_monthly.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dgv_monthly.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
+            this.dgv_monthly.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+            dataGridViewCellStyle52.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle52.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(25)))), ((int)(((byte)(72)))));
+            dataGridViewCellStyle52.Font = new System.Drawing.Font("Arial", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle52.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle52.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle52.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle52.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgv_monthly.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle52;
+            this.dgv_monthly.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle53.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle53.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle53.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            dataGridViewCellStyle53.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle53.SelectionBackColor = System.Drawing.Color.DarkTurquoise;
+            dataGridViewCellStyle53.SelectionForeColor = System.Drawing.Color.WhiteSmoke;
+            dataGridViewCellStyle53.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgv_monthly.DefaultCellStyle = dataGridViewCellStyle53;
+            this.dgv_monthly.EnableHeadersVisualStyles = false;
+            this.dgv_monthly.Location = new System.Drawing.Point(25, 182);
+            this.dgv_monthly.Name = "dgv_monthly";
+            dataGridViewCellStyle54.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle54.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle54.Font = new System.Drawing.Font("맑은 고딕", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            dataGridViewCellStyle54.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle54.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle54.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle54.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgv_monthly.RowHeadersDefaultCellStyle = dataGridViewCellStyle54;
+            this.dgv_monthly.RowHeadersWidth = 51;
+            dataGridViewCellStyle55.Font = new System.Drawing.Font("맑은 고딕", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.dgv_monthly.RowsDefaultCellStyle = dataGridViewCellStyle55;
+            this.dgv_monthly.RowTemplate.Height = 27;
+            this.dgv_monthly.Size = new System.Drawing.Size(1120, 466);
+            this.dgv_monthly.TabIndex = 19;
             // 
             // Form1
             // 
@@ -1150,8 +1359,6 @@ namespace Attendance_Management_Program
             this.tp_record.ResumeLayout(false);
             this.tp_record.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_record)).EndInit();
-            this.tp_daily_TnA_status.ResumeLayout(false);
-            this.tp_daily_TnA_status.PerformLayout();
             this.tp_daily_TnA_chart.ResumeLayout(false);
             this.tp_daily_TnA_chart.PerformLayout();
             this.tp_monthly_TnA_status.ResumeLayout(false);
@@ -1163,6 +1370,8 @@ namespace Attendance_Management_Program
             this.tp_employee_registration.ResumeLayout(false);
             this.tp_employee_registration.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_retirement)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.daily_chart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_monthly)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1177,7 +1386,6 @@ namespace Attendance_Management_Program
         private System.Windows.Forms.Panel Tab_Menu_Select_Back;
         private System.Windows.Forms.Panel Tab_Menu_Select_Bar;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label btn_daily_TnA_status;
         private System.Windows.Forms.Label btn_record;
         private System.Windows.Forms.Label btn_list_management;
         private System.Windows.Forms.TabControl tabControl1;
@@ -1187,19 +1395,15 @@ namespace Attendance_Management_Program
         private System.Windows.Forms.Label btn_department_TnA_status;
         private System.Windows.Forms.Label btn_monthly_TnA_status;
         private System.Windows.Forms.Label btn_monthly_TnA_chart;
-        private System.Windows.Forms.TabPage tp_daily_TnA_status;
         private System.Windows.Forms.TabPage tp_daily_TnA_chart;
         private System.Windows.Forms.TabPage tp_monthly_TnA_status;
         private System.Windows.Forms.TabPage tp_monthly_TnA_chart;
         private System.Windows.Forms.TabPage tp_department_TnA_status;
         private System.Windows.Forms.TabPage tp_employee_registration;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.DataGridView dataGridView2;
@@ -1235,6 +1439,20 @@ namespace Attendance_Management_Program
         private System.Windows.Forms.TextBox tb_registration_position;
         private System.Windows.Forms.DataGridView dgv_retirement;
         private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.DataVisualization.Charting.Chart daily_chart;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label_monthly_search;
+        private System.Windows.Forms.Button btn_monthly_init2;
+        private System.Windows.Forms.Button btn_monthly_init1;
+        private System.Windows.Forms.TextBox tb_monthly_dpName;
+        private System.Windows.Forms.TextBox tb_monthly_month;
+        private System.Windows.Forms.TextBox tb_monthly_year;
+        private System.Windows.Forms.Button btn_monthly_search2;
+        private System.Windows.Forms.Button btn_monthly_search1;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.DataGridView dgv_monthly;
     }
 }
 

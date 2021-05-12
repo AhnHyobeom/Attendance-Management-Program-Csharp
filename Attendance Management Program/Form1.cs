@@ -38,7 +38,6 @@ namespace Attendance_Management_Program
             menu = new List<Label>();
             menu.Add(btn_list_management);
             menu.Add(btn_record);
-            menu.Add(btn_daily_TnA_status);
             menu.Add(btn_daily_TnA_chart);
             menu.Add(btn_monthly_TnA_status);
             menu.Add(btn_monthly_TnA_chart);
@@ -86,6 +85,18 @@ namespace Attendance_Management_Program
             dgv_retirement.Columns[4].Name = "퇴사일";
             dgv_retirement.Columns[5].Name = "근속기간";
 
+            // monthly TnA status DataGridView init Columns
+            dgv_monthly.ColumnCount = 9;
+            dgv_monthly.Columns[0].Name = "부서명";
+            dgv_monthly.Columns[1].Name = "이름";
+            dgv_monthly.Columns[2].Name = "직급";
+            dgv_monthly.Columns[3].Name = "지각횟수";
+            dgv_monthly.Columns[4].Name = "조퇴횟수";
+            dgv_monthly.Columns[5].Name = "결근횟수";
+            dgv_monthly.Columns[6].Name = "연장 근무시간";
+            dgv_monthly.Columns[7].Name = "휴일 근무시간";
+            dgv_monthly.Columns[8].Name = "총 근무시간";
+
             try
             {
                 conn = new MySqlConnection(connStr);
@@ -123,6 +134,8 @@ namespace Attendance_Management_Program
             label_record_search.Text = "검색 내용 -> " + searchToday;
 
             showRetirementDGV();
+            drawDailyTnAChart();
+            showMonthlyDGV();
         }
 
         // ---------------------------------------- start tap control ----------------------------------------
@@ -285,11 +298,8 @@ namespace Attendance_Management_Program
             // acces rights.
             // Datetime format
             DateTime today = DateTime.Now;
-            string H_mm = string.Format("{0:u}", today);
-            string[] split_Date_H_mm = H_mm.Split(' ');
-            string[] split_H_mm = split_Date_H_mm[1].Split(':');
             string yyyy_MM_dd = DateTime.Now.ToString("yyyy-MM-dd");
-            string w_workonTime = split_H_mm[0] + ":" + split_H_mm[1] + ":00";
+            string w_workonTime = today.Hour + ":" + today.Minute + ":" + today.Second;
 
             string w_workoncf = "";
             string w_workoffcf = "";
@@ -331,8 +341,8 @@ namespace Attendance_Management_Program
             // to be late, to leave early
             TimeSpan late_standard = new TimeSpan(9, 0, 0);
             TimeSpan leave_standard = new TimeSpan(17, 0, 0);
-            TimeSpan work_on_time = new TimeSpan(int.Parse(split_H_mm[0]), int.Parse(split_H_mm[1]), 0);
-            TimeSpan diff_time = late_standard - work_on_time;
+            TimeSpan enter_card_time = new TimeSpan(today.Hour, today.Minute, today.Second);
+            TimeSpan diff_time = late_standard - enter_card_time;
             if(diff_time.TotalMinutes < 0)
             {
                 w_workoncf = "지각";
@@ -341,27 +351,23 @@ namespace Attendance_Management_Program
             {
                 w_workoncf = "";
             }
-            diff_time = leave_standard - work_on_time;
-            if(diff_time.TotalMinutes > 0)
+            diff_time = leave_standard - enter_card_time;
+            string w_ew = "00:00:00";
+            if (diff_time.TotalMinutes > 0)
             {
                 w_workoffcf = "조퇴";
             }
             else if(diff_time.TotalMinutes < 0)
             {
                 w_workoffcf = "연장";
+                w_ew = "";
+                w_ew += (diff_time.Hours * -1) + ":";
+                w_ew += (diff_time.Minutes * -1) + ":";
+                w_ew += (diff_time.Seconds * -1);
             }
             else
             {
                 w_workoffcf = "";
-            }
-            string w_ew = "";
-            if(diff_time.Hours < 0)
-            {
-                w_ew += (diff_time.Hours * -1);
-            } 
-            else
-            {
-                w_ew += diff_time.Hours;
             }
             // work on
             if (count == 0)
@@ -395,14 +401,32 @@ namespace Attendance_Management_Program
             }
             else
             { // work off
+                // total today working time calcul
+                TimeSpan w_tw = new TimeSpan();
+                TimeSpan temp_w_workonTime = new TimeSpan();
+                try
+                {
+                    sql = "SELECT w_workonTime FROM workrecord WHERE w_e_rfid = '" + datain + "' AND ";
+                    sql += "w_day = '" + yyyy_MM_dd + "'";
+                    cmd.CommandText = sql;
+                    reader = cmd.ExecuteReader();
+                    reader.Read();
+                    temp_w_workonTime = (TimeSpan)reader["w_workonTime"];
+                    w_tw = enter_card_time - temp_w_workonTime;
+                    reader.Close();
+                }
+                catch(MySqlException)
+                {
+                    MessageBox.Show("total today working time calcul SELECT query exception !!!");
+                }
                 // UPDATE workrecord SET w_workoffTime = '00:00:00'
                 // WHERE w_e_rfid = '0000000011' AND w_day = '2021-05-11';
-
                 try
                 {
                     sql = "UPDATE workrecord SET w_workoffTime = '";
-                    sql += w_workonTime + "', ";
-                    sql += w_workonTime + "', '00:00:00', NULL, NULL, '00:00:00', '00:00:00', '00:00:00')";
+                    sql += w_workonTime + "', w_workoffcf = '" + w_workoffcf + "'";
+                    sql += ", w_ew = '" + w_ew + "', w_tw = '" + w_tw + "' ";
+                    sql += "WHERE w_e_rfid = '" + datain + "' AND w_day = '" + yyyy_MM_dd + "'";
                     cmd.CommandText = sql;
                     cmd.ExecuteNonQuery();
                     // recordDGV update
@@ -412,7 +436,7 @@ namespace Attendance_Management_Program
                 }
                 catch
                 {
-                    MessageBox.Show("INSERT INTO workRecord query exception !!!");
+                    MessageBox.Show("UPDATE workrecord query exception !!!");
                 }
             }
         }
@@ -697,6 +721,162 @@ namespace Attendance_Management_Program
         }
         // ---------------------------------------- end recod TAB ----------------------------------------
 
+        // ---------------------------------------- start daily TnA chart ----------------------------------------
+        private void drawDailyTnAChart()
+        {
+            DateTime today = DateTime.Today;
+            try
+            {
+                sql = "SELECT w_e_name, w_tw FROM workrecord WHERE w_day = '";
+                sql += today.ToString("yyyy-MM-dd") + "'";
+                cmd.CommandText = sql;
+                reader = cmd.ExecuteReader();
+            }
+            catch(MySqlException)
+            {
+                MessageBox.Show("drawChartDaily FROM workrecord Exception !!!");
+            }
+            List<string> w_e_name = new List<string>();
+            TimeSpan w_tw = new TimeSpan();
+            List<DateTime> totalWorkList = new List<DateTime>();
+
+            while(reader.Read())
+            {
+                w_e_name.Add((string)reader["w_e_name"]);
+                w_tw = (TimeSpan)reader["w_tw"];
+                DateTime dt = today.Add(w_tw);
+                totalWorkList.Add(dt);
+            }
+            daily_chart.Series[0].YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Time;
+            daily_chart.ChartAreas[0].AxisY.LabelStyle.Format = "HH:mm";
+            daily_chart.ChartAreas[0].AxisX.Interval = 1;
+            Random rnd = new Random();
+            string point_label = "";
+
+            for (int i = 0; i < w_e_name.Count; i++)
+            {
+                daily_chart.Series[0].Points.AddXY(w_e_name[i], totalWorkList[i]);
+                daily_chart.Series[0].Points[i].Color = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
+                point_label = string.Format("{0:HH:mm}", totalWorkList[i]);
+                daily_chart.Series[0].Points[i].Label = point_label;
+                daily_chart.Series[0].Points[i].LabelForeColor = Color.Maroon;
+                daily_chart.Series[0].Points[i].Font = new Font("Arial", 12, FontStyle.Bold);
+            }
+
+            reader.Close();
+        }
+        // ---------------------------------------- end daily TnA chart ----------------------------------------
+
+        // ---------------------------------------- start monthly TnA status ----------------------------------------
+        
+        private void showMonthlyDGV()
+        {
+            DateTime today = DateTime.Today;
+            List<string> e_id_list = new List<string>();
+            string from_month_sql = today.Year.ToString() + today.Month.ToString() + "01";
+            string to_month_sql = "";
+            if (today.Month < 12)
+            {
+                to_month_sql = today.Year.ToString() + (today.Month + 1).ToString() + "01";
+            }
+            else
+            {
+
+            }
+
+            sql = "SELECT e_rfid FROM employee";
+            try
+            {
+                cmd.CommandText = sql;
+                reader = cmd.ExecuteReader();
+                
+                while(reader.Read())
+                {
+                    e_id_list.Add((string)reader["e_rfid"]);
+                }
+            }
+            catch(MySqlException)
+            {
+                MessageBox.Show("Monthly SELECT e_rfid Exception !!!");
+            }
+
+            // SELECT COUNT(CASE WHEN w_workoncf = '지각' THEN 1 END) AS cntLate, 
+            //COUNT(CASE WHEN w_workoffcf = '조퇴' THEN 1 END) AS cntEarly, 
+            //COUNT(CASE WHEN w_workoncf = '결근' THEN 1 END) AS cntOff, SUM(TIME_TO_SEC(w_ew)) AS sum_ew, 
+            //SUM(TIME_TO_SEC(w_hw)) AS sum_hw, SUM(TIME_TO_SEC(w_tw)) AS sum_tw 
+            //FROM workrecord WHERE w_e_rfid = '0000000007' AND w_day >= '20210501' AND w_day < '20210601';
+            int cntLate = 0, cntEarly = 0, cntOff = 0;
+            int sum_ew = 0, sum_hw = 0, sum_tw = 0;
+            // x / 3600 = hour, x / 60 % 60 = minute
+            for (int i = 0; i < e_id_list.Count; i++)
+            {
+                sql = "SELECT COUNT(CASE WHEN w_workoncf = '지각' THEN 1 END) AS cntLate, ";
+                sql += "COUNT(CASE WHEN w_workoffcf = '조퇴' THEN 1 END) AS cntEarly, ";
+                sql += "COUNT(CASE WHEN w_workoncf = '결근' THEN 1 END) AS cntOff, SUM(TIME_TO_SEC(w_ew)) AS sum_ew, ";
+                sql += "SUM(TIME_TO_SEC(w_hw)) AS sum_hw, SUM(TIME_TO_SEC(w_tw)) AS sum_tw FROM workrecord WHERE w_e_rfid = '";
+                sql += e_id_list[i] + "', AND w_day >= '" + from_month_sql + "' AND w_day < '" + to_month_sql + "'";
+                MessageBox.Show(sql);
+                break;
+                try
+                {
+                    cmd.CommandText = sql;
+                    reader = cmd.ExecuteReader();
+                    reader.Read();
+                    cntLate = (int)reader["cntLate"];
+                    cntEarly = (int)reader["cntEarly"];
+                    cntOff = (int)reader["cntOff"];
+                    sum_ew = (int)reader["sum_ew"];
+                    sum_hw = (int)reader["sum_hw"];
+                    sum_tw = (int)reader["sum_tw"];
+                }
+                catch (MySqlException)
+                {
+                    MessageBox.Show("Monthly SELECT e_rfid Exception !!!");
+                }
+            }
+        }
+        private void btn_monthly_search1_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void btn_monthly_search2_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void btn_monthly_init1_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void btn_monthly_init2_Click(object sender, EventArgs e)
+        {
+
+        }
+        private void label23_Paint(object sender, PaintEventArgs e)
+        {
+            // 3, 10, 11, 12
+            ControlPaint.DrawBorder(e.Graphics, label23.DisplayRectangle, Color.FromArgb(0, 0, 192), ButtonBorderStyle.Solid);
+            ControlPaint.DrawBorder(e.Graphics, label22.DisplayRectangle, Color.FromArgb(0, 0, 192), ButtonBorderStyle.Solid);
+            ControlPaint.DrawBorder(e.Graphics, label21.DisplayRectangle, Color.FromArgb(0, 0, 192), ButtonBorderStyle.Solid);
+        }
+        private void tp_monthly_TnA_status_Paint(object sender, PaintEventArgs e)
+        {
+            // monthly label boder darw
+            tb_monthly_dpName.BorderStyle = BorderStyle.None;
+            Pen p = new Pen(Color.FromArgb(0, 0, 192));
+            Graphics g = e.Graphics;
+            int variance = 1;
+            g.DrawRectangle(p, new Rectangle(tb_monthly_dpName.Location.X - variance, tb_monthly_dpName.Location.Y - variance, tb_monthly_dpName.Width + variance, tb_monthly_dpName.Height + variance));
+
+            tb_monthly_month.BorderStyle = BorderStyle.None;
+            Graphics g2 = e.Graphics;
+            g2.DrawRectangle(p, new Rectangle(tb_monthly_month.Location.X - variance, tb_monthly_month.Location.Y - variance, tb_monthly_month.Width + variance, tb_monthly_month.Height + variance));
+
+            tb_monthly_year.BorderStyle = BorderStyle.None;
+            Graphics g3 = e.Graphics;
+            g3.DrawRectangle(p, new Rectangle(tb_monthly_year.Location.X - variance, tb_monthly_year.Location.Y - variance, tb_monthly_year.Width + variance, tb_monthly_year.Height + variance));
+        }
+        // ---------------------------------------- end monthly TnA status ----------------------------------------
+
         // ---------------------------------------- start employee registration ----------------------------------------
         private void button1_Click(object sender, EventArgs e)
         { // btn_registration_reg
@@ -799,6 +979,7 @@ namespace Attendance_Management_Program
         }
         private void tp_employee_registration_Paint(object sender, PaintEventArgs e)
         {
+            // draw textbox BorderLine
             tb_registration_classification.BorderStyle = BorderStyle.None;
             Pen p = new Pen(Color.DodgerBlue);
             Graphics g = e.Graphics;
@@ -863,7 +1044,12 @@ namespace Attendance_Management_Program
 
         private void setMenuChgane(int index)
         {
-            // 100, 120, 150, 150, 150, 150, 180, 170
+            // daily TnA status delete... -> inex - 1
+            if(index > 1)
+            {
+                index--;
+            }
+            // 100, 120, 150, 150, 150, 180, 170
             if (tabControl1.SelectedIndex != index)
             {
                 menu[tabControl1.SelectedIndex].ForeColor = Color.FromArgb(111, 111, 111);
@@ -881,10 +1067,7 @@ namespace Attendance_Management_Program
         {
             setMenuChgane(1);
         }
-        private void btn_daily_TnA_status_Click(object sender, EventArgs e)
-        {
-            setMenuChgane(2);
-        }
+        
         private void btn_daily_TnA_chart_Click(object sender, EventArgs e)
         {
             setMenuChgane(3);
@@ -915,6 +1098,9 @@ namespace Attendance_Management_Program
         private void label1_Click(object sender, EventArgs e)
         {
 
+        }
+        private void btn_daily_TnA_status_Click(object sender, EventArgs e)
+        {
         }
         private void Tab_Menu_Back_Paint(object sender, PaintEventArgs e)
         {
