@@ -134,7 +134,7 @@ namespace Attendance_Management_Program
             label_record_search.Text = "검색 내용 -> " + searchToday;
 
             showRetirementDGV();
-            drawDailyTnAChart();
+            drawDailyTnAChart(searchToday.Substring(0, 4), searchToday.Substring(5, 2), searchToday.Substring(8, 2));
             showMonthlyDGV();
         }
 
@@ -467,21 +467,25 @@ namespace Attendance_Management_Program
             {
                 cmd.CommandText = sql;
                 reader = cmd.ExecuteReader();
-
-                int dm_id = 0;
-                string dm_name = "";
-                // init Rows
-                while (reader.Read())
-                {
-                    dm_name = (string)reader["dm_name"];
-                    dm_id = (int)reader["dm_id"];
-                    dataGridView1.Rows.Add(++noIndex, dm_name, string.Format("{0:D3}", dm_id));
-                }
             }
             catch (MySqlException)
             {
+                reader.Close();
                 MessageBox.Show("department init DB Fail !!!");
             }
+            int dm_id = 0;
+            string dm_name = "";
+            // init Rows
+            while (reader.Read())
+            {
+                dm_name = (string)reader["dm_name"];
+                dm_id = (int)reader["dm_id"];
+                dataGridView1.Rows.Add(++noIndex, dm_name, string.Format("{0:D3}", dm_id));
+            }
+            /*for(int i = 0; i < dataGridView1.Rows.Count - 1; i++)
+            { 
+                dataGridView1.Rows[i].HeaderCell.Value = (i + 1).ToString();
+            }*/
             // last Rows
             dataGridView1.Rows[dataGridView1.Rows.Count - 1].DefaultCellStyle.BackColor = Color.FromArgb(20, 25, 72);
             dataGridView1.Rows[dataGridView1.Rows.Count - 1].DefaultCellStyle.ForeColor = Color.White;
@@ -490,9 +494,6 @@ namespace Attendance_Management_Program
             dataGridView1.Rows[dataGridView1.Rows.Count - 1].Cells[0].Value = "";
             dataGridView1.Rows[dataGridView1.Rows.Count - 1].Cells[1].Value = "Total " + noIndex;
             dataGridView1.Rows[dataGridView1.Rows.Count - 1].Cells[2].Value = "";
-
-            dataGridView1.Height = dataGridView1.Rows.GetRowsHeight(DataGridViewElementStates.None) + dataGridView1.ColumnHeadersHeight + 2;
-            dataGridView1.Width = dataGridView1.Columns.GetColumnsWidth(DataGridViewElementStates.None) + dataGridView1.RowHeadersWidth + 2;
 
             reader.Close();
         }
@@ -541,8 +542,6 @@ namespace Attendance_Management_Program
             dataGridView2.Rows[dataGridView2.Rows.Count - 1].Cells[4].Value = "";
             dataGridView2.Rows[dataGridView2.Rows.Count - 1].Cells[5].Value = "";
 
-            dataGridView2.Height = dataGridView2.Rows.GetRowsHeight(DataGridViewElementStates.None) + dataGridView2.ColumnHeadersHeight + 2;
-            dataGridView2.Width = dataGridView2.Columns.GetColumnsWidth(DataGridViewElementStates.None) + dataGridView2.RowHeadersWidth + 2;
 
             reader.Close();
         }
@@ -634,8 +633,6 @@ namespace Attendance_Management_Program
                 w_tw = (TimeSpan)reader["w_tw"];
                 dgv_record.Rows.Add(w_day.ToString("yyyy-MM-dd"), e_department, w_e_name, w_e_position, w_workonTime.ToString(@"hh\:mm"), w_workoffTime.ToString(@"hh\:mm"), w_workoncf, w_workoffcf, w_ew.ToString(@"hh\:mm"), w_hw.ToString(@"hh\:mm"), w_tw.ToString(@"hh\:mm"));
             }
-            dgv_record.Height = dgv_record.Rows.GetRowsHeight(DataGridViewElementStates.None) + dgv_record.ColumnHeadersHeight + 2;
-            dgv_record.Width = dgv_record.Columns.GetColumnsWidth(DataGridViewElementStates.None) + dgv_record.RowHeadersWidth + 2;
             reader.Close();
 
         }
@@ -722,18 +719,18 @@ namespace Attendance_Management_Program
         // ---------------------------------------- end recod TAB ----------------------------------------
 
         // ---------------------------------------- start daily TnA chart ----------------------------------------
-        private void drawDailyTnAChart()
+        private void drawDailyTnAChart(string year, string month, string day)
         {
-            DateTime today = DateTime.Today;
             try
             {
                 sql = "SELECT w_e_name, w_tw FROM workrecord WHERE w_day = '";
-                sql += today.ToString("yyyy-MM-dd") + "'";
+                sql += year + month + day + "'";
                 cmd.CommandText = sql;
                 reader = cmd.ExecuteReader();
             }
             catch(MySqlException)
             {
+                reader.Close();
                 MessageBox.Show("drawChartDaily FROM workrecord Exception !!!");
             }
             List<string> w_e_name = new List<string>();
@@ -744,9 +741,11 @@ namespace Attendance_Management_Program
             {
                 w_e_name.Add((string)reader["w_e_name"]);
                 w_tw = (TimeSpan)reader["w_tw"];
-                DateTime dt = today.Add(w_tw);
+                DateTime dt = new DateTime(int.Parse(year), int.Parse(month), int.Parse(day), w_tw.Hours, w_tw.Minutes, w_tw.Seconds);
                 totalWorkList.Add(dt);
             }
+            daily_chart.Series.Clear();
+            daily_chart.Series.Add("Series1");
             daily_chart.Series[0].YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Time;
             daily_chart.ChartAreas[0].AxisY.LabelStyle.Format = "HH:mm";
             daily_chart.ChartAreas[0].AxisX.Interval = 1;
@@ -759,30 +758,77 @@ namespace Attendance_Management_Program
                 daily_chart.Series[0].Points[i].Color = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
                 point_label = string.Format("{0:HH:mm}", totalWorkList[i]);
                 daily_chart.Series[0].Points[i].Label = point_label;
-                daily_chart.Series[0].Points[i].LabelForeColor = Color.Maroon;
-                daily_chart.Series[0].Points[i].Font = new Font("Arial", 12, FontStyle.Bold);
+                daily_chart.Series[0].Points[i].LabelForeColor = Color.DodgerBlue;
+                daily_chart.Series[0].Points[i].Font = new Font("MD이솝체", 12, FontStyle.Bold);
             }
 
             reader.Close();
+            label_daily_chart_search.Text = year + "년 " + month + "월 " + day + "일 총 근무 시간 현황";
+        }
+        private void search_daily_chart()
+        {
+            if (tb_daily_chart_year.Text == "" || tb_daily_chart_month.Text == "" || tb_daily_chart_day.Text == "")
+            {
+                MessageBox.Show("검색 값을 제대로 입력하세요 !!!");
+                return;
+            }
+            string month = tb_daily_chart_month.Text;
+            if (int.Parse(month) < 10 && month.Length < 2)
+            {
+                month = "0" + tb_daily_chart_month.Text;
+            }
+            string day = tb_daily_chart_day.Text;
+            if (int.Parse(day) < 10 && day.Length < 2)
+            {
+                day = "0" + tb_daily_chart_day.Text;
+            }
+            drawDailyTnAChart(tb_daily_chart_year.Text, month, day);
+        }
+        private void btn_daily_chart_search1_Click(object sender, EventArgs e)
+        {
+            search_daily_chart();
+        }
+        private void btn_daily_chart_search2_Click(object sender, EventArgs e)
+        {
+            search_daily_chart();
         }
         // ---------------------------------------- end daily TnA chart ----------------------------------------
 
         // ---------------------------------------- start monthly TnA status ----------------------------------------
-        
+        List<string> e_id_list = new List<string>();
         private void showMonthlyDGV()
         {
             DateTime today = DateTime.Today;
-            List<string> e_id_list = new List<string>();
-            string from_month_sql = today.Year.ToString() + today.Month.ToString() + "01";
-            string to_month_sql = "";
-            if (today.Month < 12)
+            e_id_list.Clear();
+            string from_year = today.Year.ToString();
+            string from_month = "";
+            if(today.Month < 10)
             {
-                to_month_sql = today.Year.ToString() + (today.Month + 1).ToString() + "01";
+                from_month = "0" + today.Month.ToString();
             }
             else
             {
-
+                from_month = today.Month.ToString();
             }
+            string from_month_sql = from_year + from_month + "01";
+            string to_year = "";
+            string to_month = "";
+            if(today.Month == 12)
+            {
+                to_year = (today.Year + 1).ToString();
+                to_month = "01";
+            }
+            else if(today.Month < 9) // 1 ~ 8
+            {
+                to_year = today.Year.ToString();
+                to_month = "0" + (today.Month + 1).ToString();
+            }
+            else // (9 ~ 11)
+            {
+                to_year = today.Year.ToString();
+                to_month = (today.Month + 1).ToString();
+            }
+            string to_month_sql = to_year + to_month + "01";
 
             sql = "SELECT e_rfid FROM employee";
             try
@@ -794,62 +840,211 @@ namespace Attendance_Management_Program
                 {
                     e_id_list.Add((string)reader["e_rfid"]);
                 }
+                reader.Close();
             }
             catch(MySqlException)
             {
-                MessageBox.Show("Monthly SELECT e_rfid Exception !!!");
+                reader.Close();
+                MessageBox.Show("Monthly SELECT e_rfid Exception !!! ");
             }
-
             // SELECT COUNT(CASE WHEN w_workoncf = '지각' THEN 1 END) AS cntLate, 
             //COUNT(CASE WHEN w_workoffcf = '조퇴' THEN 1 END) AS cntEarly, 
             //COUNT(CASE WHEN w_workoncf = '결근' THEN 1 END) AS cntOff, SUM(TIME_TO_SEC(w_ew)) AS sum_ew, 
             //SUM(TIME_TO_SEC(w_hw)) AS sum_hw, SUM(TIME_TO_SEC(w_tw)) AS sum_tw 
             //FROM workrecord WHERE w_e_rfid = '0000000007' AND w_day >= '20210501' AND w_day < '20210601';
             int cntLate = 0, cntEarly = 0, cntOff = 0;
-            int sum_ew = 0, sum_hw = 0, sum_tw = 0;
+            int sum_ew = 0, sum_hw = 0, sum_tw = 0, w_dm_id = 0;
+            string w_e_name = "", w_e_position = "";
+            dgv_monthly.Rows.Clear();
             // x / 3600 = hour, x / 60 % 60 = minute
             for (int i = 0; i < e_id_list.Count; i++)
             {
-                sql = "SELECT COUNT(CASE WHEN w_workoncf = '지각' THEN 1 END) AS cntLate, ";
+                sql = "SELECT w_dm_id, w_e_name, w_e_position, COUNT(CASE WHEN w_workoncf = '지각' THEN 1 END) AS cntLate, ";
                 sql += "COUNT(CASE WHEN w_workoffcf = '조퇴' THEN 1 END) AS cntEarly, ";
                 sql += "COUNT(CASE WHEN w_workoncf = '결근' THEN 1 END) AS cntOff, SUM(TIME_TO_SEC(w_ew)) AS sum_ew, ";
                 sql += "SUM(TIME_TO_SEC(w_hw)) AS sum_hw, SUM(TIME_TO_SEC(w_tw)) AS sum_tw FROM workrecord WHERE w_e_rfid = '";
-                sql += e_id_list[i] + "', AND w_day >= '" + from_month_sql + "' AND w_day < '" + to_month_sql + "'";
-                MessageBox.Show(sql);
-                break;
+                sql += e_id_list[i] + "' AND w_day >= '" + from_month_sql + "' AND w_day < '" + to_month_sql + "'";
                 try
                 {
                     cmd.CommandText = sql;
                     reader = cmd.ExecuteReader();
                     reader.Read();
-                    cntLate = (int)reader["cntLate"];
-                    cntEarly = (int)reader["cntEarly"];
-                    cntOff = (int)reader["cntOff"];
-                    sum_ew = (int)reader["sum_ew"];
-                    sum_hw = (int)reader["sum_hw"];
-                    sum_tw = (int)reader["sum_tw"];
+                    w_e_name = (string)reader["w_e_name"];
+                    w_e_position = (string)reader["w_e_position"];
+                    w_dm_id = Convert.ToInt32(reader["w_dm_id"]);
+                    cntLate = Convert.ToInt32(reader["cntLate"]);
+                    cntEarly = Convert.ToInt32(reader["cntEarly"]);
+                    cntOff = Convert.ToInt32(reader["cntOff"]);
+                    sum_ew = Convert.ToInt32(reader["sum_ew"]);
+                    sum_hw = Convert.ToInt32(reader["sum_hw"]);
+                    sum_tw = Convert.ToInt32(reader["sum_tw"]);
+                    reader.Close();
                 }
                 catch (MySqlException)
                 {
-                    MessageBox.Show("Monthly SELECT e_rfid Exception !!!");
+                    reader.Close();
+                    MessageBox.Show("Monthly SELECT COUNT e_rfid Exception !!!");
+                }
+                dgv_monthly.Rows.Add(department_name[w_dm_id], w_e_name, w_e_position, cntLate, cntEarly, cntOff, sum_ew / 3600 + "시간 " + sum_ew /60 % 60 + "분", sum_hw / 3600 + "시간 " + sum_hw / 60 % 60 + "분", sum_tw / 3600 + "시간 " + sum_tw /60 % 60 + "분");
+            }
+            label_monthly_search.Text = "검색 기준 : " + from_year + "년 " + from_month + "월 기준";
+            drawMonthlyTnAChart(from_year, from_month_sql, to_month_sql);
+        }
+        private void monthly_search_DGV()
+        {
+            if(tb_monthly_dpName.Text == "" && tb_monthly_month.Text == "" && tb_monthly_year.Text == "")
+            {
+                return;
+            }
+            DateTime today = DateTime.Today;
+
+            string from_year = "";
+            if(tb_monthly_year.Text == "")
+            {
+                from_year = today.Year.ToString();
+            }
+            else if(tb_monthly_year.Text.Length != 4)
+            {
+                from_year = "2021";
+            }
+            else
+            {
+                from_year = tb_monthly_year.Text;
+            }
+
+            string from_month = "";
+            if(tb_monthly_month.Text == "")
+            {
+                if (today.Month < 10)
+                {
+                    from_month = "0" + today.Month.ToString();
+                }
+                else
+                {
+                    from_month = today.Month.ToString();
                 }
             }
+            else
+            {
+                if(int.Parse(tb_monthly_month.Text) < 10 && tb_monthly_month.Text.Length < 2)
+                {
+                    from_month = "0" + tb_monthly_month.Text;
+                }
+                else
+                {
+                    from_month = tb_monthly_month.Text;
+                }
+            }
+            string from_month_sql = from_year + from_month + "01";
+
+            string to_year = "";
+            string to_month = "";
+            if (int.Parse(from_month) == 12)
+            {
+                to_year = (int.Parse(from_year) + 1).ToString();
+                to_month = "01";
+            }
+            else if (int.Parse(from_month) < 9) // 1 ~ 8
+            {
+                to_year = from_year;
+                to_month = "0" + (int.Parse(from_month) + 1).ToString();
+            }
+            else // (9 ~ 11)
+            {
+                to_year = from_year;
+                to_month = (int.Parse(from_month) + 1).ToString();
+            }
+
+            string to_month_sql = to_year + to_month + "01";
+            if(tb_monthly_dpName.Text != "")
+            {
+                e_id_list.Clear();
+                sql = "SELECT e_rfid FROM employee WHERE e_dm_id = ";
+                List<string> li = department_name.ToList();
+                int index = li.FindIndex(x => x.Contains(tb_monthly_dpName.Text));
+                sql += index;
+                try
+                {
+                    cmd.CommandText = sql;
+                    reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        e_id_list.Add((string)reader["e_rfid"]);
+                    }
+                    reader.Close();
+                }
+                catch (MySqlException)
+                {
+                    reader.Close();
+                    MessageBox.Show("Please enter the department name correctly !!!");
+                }
+            }
+            
+            // SELECT COUNT(CASE WHEN w_workoncf = '지각' THEN 1 END) AS cntLate, 
+            //COUNT(CASE WHEN w_workoffcf = '조퇴' THEN 1 END) AS cntEarly, 
+            //COUNT(CASE WHEN w_workoncf = '결근' THEN 1 END) AS cntOff, SUM(TIME_TO_SEC(w_ew)) AS sum_ew, 
+            //SUM(TIME_TO_SEC(w_hw)) AS sum_hw, SUM(TIME_TO_SEC(w_tw)) AS sum_tw 
+            //FROM workrecord WHERE w_e_rfid = '0000000007' AND w_day >= '20210501' AND w_day < '20210601';
+            int cntLate = 0, cntEarly = 0, cntOff = 0;
+            int sum_ew = 0, sum_hw = 0, sum_tw = 0, w_dm_id = 0;
+            string w_e_name = "", w_e_position = "";
+            dgv_monthly.Rows.Clear();
+            // x / 3600 = hour, x / 60 % 60 = minute
+            for (int i = 0; i < e_id_list.Count; i++)
+            {
+                sql = "SELECT w_dm_id, w_e_name, w_e_position, COUNT(CASE WHEN w_workoncf = '지각' THEN 1 END) AS cntLate, ";
+                sql += "COUNT(CASE WHEN w_workoffcf = '조퇴' THEN 1 END) AS cntEarly, ";
+                sql += "COUNT(CASE WHEN w_workoncf = '결근' THEN 1 END) AS cntOff, SUM(TIME_TO_SEC(w_ew)) AS sum_ew, ";
+                sql += "SUM(TIME_TO_SEC(w_hw)) AS sum_hw, SUM(TIME_TO_SEC(w_tw)) AS sum_tw FROM workrecord WHERE w_e_rfid = '";
+                sql += e_id_list[i] + "' AND w_day >= '" + from_month_sql + "' AND w_day < '" + to_month_sql + "'";
+                try
+                {
+                    cmd.CommandText = sql;
+                    reader = cmd.ExecuteReader();
+                    reader.Read();
+                    if (reader["w_e_name"] == DBNull.Value)
+                    {
+                        MessageBox.Show("해당 데이터는 존재하지 않습니다.");
+                        reader.Close();
+                        return;
+                    }
+                    w_e_name = (string)reader["w_e_name"];
+                    w_e_position = (string)reader["w_e_position"];
+                    w_dm_id = Convert.ToInt32(reader["w_dm_id"]);
+                    cntLate = Convert.ToInt32(reader["cntLate"]);
+                    cntEarly = Convert.ToInt32(reader["cntEarly"]);
+                    cntOff = Convert.ToInt32(reader["cntOff"]);
+                    sum_ew = Convert.ToInt32(reader["sum_ew"]);
+                    sum_hw = Convert.ToInt32(reader["sum_hw"]);
+                    sum_tw = Convert.ToInt32(reader["sum_tw"]);
+                    reader.Close();
+                }
+                catch (MySqlException)
+                {
+                    reader.Close();
+                    MessageBox.Show("Monthly SELECT COUNT e_rfid Exception !!!");
+                }
+                dgv_monthly.Rows.Add(department_name[w_dm_id], w_e_name, w_e_position, cntLate, cntEarly, cntOff, sum_ew / 3600 + "시간 " + sum_ew / 60 % 60 + "분", sum_hw / 3600 + "시간 " + sum_hw / 60 % 60 + "분", sum_tw / 3600 + "시간 " + sum_tw / 60 % 60 + "분");
+            }
+            label_monthly_search.Text = "검색 내용 : " + from_year + "년 " + from_month + "월 " + tb_monthly_dpName.Text;
+            drawMonthlyTnAChart(from_year, from_month_sql, to_month_sql);
         }
         private void btn_monthly_search1_Click(object sender, EventArgs e)
         {
-
+            monthly_search_DGV();
         }
         private void btn_monthly_search2_Click(object sender, EventArgs e)
         {
-
+            monthly_search_DGV();
         }
         private void btn_monthly_init1_Click(object sender, EventArgs e)
         {
-
+            showMonthlyDGV();
         }
         private void btn_monthly_init2_Click(object sender, EventArgs e)
         {
-
+            showMonthlyDGV();
         }
         private void label23_Paint(object sender, PaintEventArgs e)
         {
@@ -876,6 +1071,144 @@ namespace Attendance_Management_Program
             g3.DrawRectangle(p, new Rectangle(tb_monthly_year.Location.X - variance, tb_monthly_year.Location.Y - variance, tb_monthly_year.Width + variance, tb_monthly_year.Height + variance));
         }
         // ---------------------------------------- end monthly TnA status ----------------------------------------
+
+        // ---------------------------------------- start monthly TnA chart ----------------------------------------
+        private void drawMonthlyTnAChart(string from_year, string from_month_sql, string to_month_sql)
+        {
+            // SELECT w_e_name, SUM(TIME_TO_SEC(w_tw)) AS sum_tw FROM workrecord 
+            // WHERE w_day >= '20210501' AND w_day < '20210601' GROUP BY w_e_rfid;
+            try
+            {
+                sql = "SELECT w_e_name, SUM(TIME_TO_SEC(w_tw)) AS sum_tw FROM workrecord ";
+                sql += "WHERE w_day >= '" + from_month_sql + "' AND w_day < '" + to_month_sql + "' GROUP BY w_e_rfid";
+                cmd.CommandText = sql;
+                reader = cmd.ExecuteReader();
+            }
+            catch (MySqlException)
+            {
+                reader.Close();
+                MessageBox.Show("drawChartMonthly FROM workrecord Exception !!!");
+            }
+            List<string> w_e_name = new List<string>();
+            List<int> sum_tw = new List<int>();
+
+            while (reader.Read())
+            {
+                w_e_name.Add((string)reader["w_e_name"]);
+                sum_tw.Add(Convert.ToInt32(reader["sum_tw"]) / 3600);
+            }
+            monthly_chart.Series.Clear();
+            monthly_chart.Series.Add("Series1");
+            monthly_chart.ChartAreas[0].AxisY.Minimum = 0;
+            monthly_chart.ChartAreas[0].AxisY.Maximum = 220;
+            monthly_chart.ChartAreas[0].AxisX.Interval = 1;
+            Random rnd = new Random();
+
+            for (int i = 0; i < w_e_name.Count; i++)
+            {
+                monthly_chart.Series[0].Points.AddXY(w_e_name[i], sum_tw[i]);
+                monthly_chart.Series[0].Points[i].Color = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
+                monthly_chart.Series[0].Points[i].Label = sum_tw[i].ToString();
+                monthly_chart.Series[0].Points[i].LabelForeColor = Color.DodgerBlue;
+                monthly_chart.Series[0].Points[i].Font = new Font("MD이솝체", 12, FontStyle.Bold);
+            }
+
+            reader.Close();
+            label_monthly_chart.Text = from_year + "년 " + from_month_sql.Substring(4, 2) + "월 총 근무시간 현황";
+        }
+        private void monthly_chart_search()
+        {
+            DateTime today = DateTime.Today;
+            string from_year = "";
+            if (tb_monthly_char_year.Text == "")
+            {
+                from_year = today.Year.ToString();
+            }
+            else if (tb_monthly_char_year.Text.Length != 4)
+            {
+                from_year = today.Year.ToString();
+            }
+            else
+            {
+                from_year = tb_monthly_char_year.Text;
+            }
+
+            string from_month = "";
+            if (tb_monthly_char_month.Text == "")
+            {
+                if (today.Month < 10)
+                {
+                    from_month = "0" + today.Month.ToString();
+                }
+                else
+                {
+                    from_month = today.Month.ToString();
+                }
+            }
+            else
+            {
+                if (int.Parse(tb_monthly_char_month.Text) < 10 && tb_monthly_char_month.Text.Length < 2)
+                {
+                    from_month = "0" + tb_monthly_char_month.Text;
+                }
+                else
+                {
+                    from_month = tb_monthly_char_month.Text;
+                }
+            }
+            string from_month_sql = from_year + from_month + "01";
+
+            string to_year = "";
+            string to_month = "";
+            if (int.Parse(from_month) == 12)
+            {
+                to_year = (int.Parse(from_year) + 1).ToString();
+                to_month = "01";
+            }
+            else if (int.Parse(from_month) < 10) // 1 ~ 9
+            {
+                to_year = from_year;
+                to_month = "0" + (int.Parse(from_month) + 1).ToString();
+            }
+            else // (10 ~ 11)
+            {
+                to_year = from_year;
+                to_month = (int.Parse(from_month) + 1).ToString();
+            }
+            string to_month_sql = to_year + to_month + "01";
+            drawMonthlyTnAChart(from_year, from_month_sql, to_month_sql);
+        }
+
+        private void btn_monthly_char2_Click(object sender, EventArgs e)
+        {
+            monthly_chart_search();
+        }
+        private void btn_monthly_char1_Click(object sender, EventArgs e)
+        {
+            monthly_chart_search();
+        }
+        private void label9_Paint(object sender, PaintEventArgs e)
+        {
+            // 9
+            ControlPaint.DrawBorder(e.Graphics, label9.DisplayRectangle, Color.FromArgb(0, 0, 192), ButtonBorderStyle.Solid);
+        }
+        private void label6_Paint(object sender, PaintEventArgs e)
+        {
+            ControlPaint.DrawBorder(e.Graphics, label6.DisplayRectangle, Color.FromArgb(0, 0, 192), ButtonBorderStyle.Solid);
+        }
+        private void tp_monthly_TnA_chart_Paint(object sender, PaintEventArgs e)
+        {
+            tb_monthly_char_year.BorderStyle = BorderStyle.None;
+            Pen p = new Pen(Color.FromArgb(0, 0, 192));
+            Graphics g = e.Graphics;
+            int variance = 1;
+            g.DrawRectangle(p, new Rectangle(tb_monthly_char_year.Location.X - variance, tb_monthly_char_year.Location.Y - variance, tb_monthly_char_year.Width + variance, tb_monthly_char_year.Height + variance));
+
+            tb_monthly_char_month.BorderStyle = BorderStyle.None;
+            Graphics g2 = e.Graphics;
+            g2.DrawRectangle(p, new Rectangle(tb_monthly_char_month.Location.X - variance, tb_monthly_char_month.Location.Y - variance, tb_monthly_char_month.Width + variance, tb_monthly_char_month.Height + variance));
+        }
+        // ---------------------------------------- end monthly TnA chart ----------------------------------------
 
         // ---------------------------------------- start employee registration ----------------------------------------
         private void button1_Click(object sender, EventArgs e)
@@ -1021,7 +1354,6 @@ namespace Attendance_Management_Program
             int r_twd = 0;
 
             dgv_retirement.Rows.Clear();
-
             while (reader.Read())
             {
                 r_name = (string)reader["r_name"];
@@ -1032,8 +1364,6 @@ namespace Attendance_Management_Program
                 r_twd = (int)reader["r_twd"];
                 dgv_retirement.Rows.Add(r_name, r_dm_id, r_position, r_wsd.ToString("yyyy-MM-dd"), r_ewd.ToString("yyyy-MM-dd"), r_twd);
             }
-            dgv_retirement.Height = dgv_retirement.Rows.GetRowsHeight(DataGridViewElementStates.None) + dgv_retirement.ColumnHeadersHeight + 2;
-            dgv_retirement.Width = dgv_retirement.Columns.GetColumnsWidth(DataGridViewElementStates.None) + dgv_retirement.RowHeadersWidth + 2;
             reader.Close();
         }
 
