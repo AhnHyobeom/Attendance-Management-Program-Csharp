@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO.Ports; // Add for UART communication
 using MySql.Data.MySqlClient; // Add for MySQL
+using System.Runtime.InteropServices;
+using Excel = Microsoft.Office.Interop.Excel;
+using System.IO;
 
 namespace Attendance_Management_Program
 {
@@ -27,6 +30,12 @@ namespace Attendance_Management_Program
         List<string> dataParseList = new List<string>(); // dataReceive Event data parsing
         string[] department_name = { "사장실", "임원진", "관리팀", "컨텐츠팀", "개발팀",
                                     "고객지원팀", "기획팀", "디자인팀", "업무지원팀" };
+
+        Excel.Application excelApp = null; 
+        Excel.Workbook workBook = null; 
+        Excel.Worksheet workSheet1 = null;
+        Excel.Worksheet workSheet2 = null;
+
         public Form1()
         {
             InitializeComponent();
@@ -136,6 +145,10 @@ namespace Attendance_Management_Program
             showRetirementDGV();
             drawDailyTnAChart(searchToday.Substring(0, 4), searchToday.Substring(5, 2), searchToday.Substring(8, 2));
             showMonthlyDGV();
+            dp_search_chart();
+            label_manage_excel_save.Visible = false;
+            label_record_excel_save.Visible = false;
+            label_monthly_TnA_excel.Visible = false;
         }
 
         // ---------------------------------------- start tap control ----------------------------------------
@@ -1369,6 +1382,179 @@ namespace Attendance_Management_Program
 
         // ---------------------------------------- end employee registration ----------------------------------------
 
+        // ---------------------------------------- start department avg chart ----------------------------------------
+        private void drawDpChart(string from_year, string from_month_sql, string to_month_sql)
+        {
+            int w_dm_id = 0, w_twcnt = 0, sum_tw = 0;
+            int[] w_twcnt_arr = new int[department_name.Length];
+            int[] sum_tw_arr = new int[department_name.Length];
+            // SELECT w_dm_id, COUNT(CASE WHEN w_tw >= '00:00:00' THEN 1 END) AS w_twcnt, 
+            // SUM(TIME_TO_SEC(w_tw)) AS sum_tw FROM workrecord WHERE w_day >= '20210501' 
+            // AND w_day < '20210601' GROUP BY w_e_rfid ORDER BY w_dm_id;
+            sql = "SELECT w_dm_id, COUNT(CASE WHEN w_tw >= '00:00:00' THEN 1 END) AS w_twcnt, ";
+            sql += "SUM(TIME_TO_SEC(w_tw)) AS sum_tw FROM workrecord WHERE w_day >= '" + from_month_sql;
+            sql += "' AND w_day < '" + to_month_sql + "' GROUP BY w_e_rfid ORDER BY w_dm_id";
+            cmd.CommandText = sql;
+            reader = cmd.ExecuteReader();
+            while(reader.Read())
+            {
+                w_dm_id = Convert.ToInt32(reader["w_dm_id"]);
+                w_twcnt = Convert.ToInt32(reader["w_twcnt"]);
+                sum_tw = Convert.ToInt32(reader["sum_tw"]);
+                if(w_twcnt_arr[w_dm_id] == 0)
+                {
+                    w_twcnt_arr[w_dm_id] = w_twcnt;
+                    sum_tw_arr[w_dm_id] = sum_tw;
+                }
+                else
+                {
+                    w_twcnt_arr[w_dm_id] = w_twcnt_arr[w_dm_id] + w_twcnt;
+                    sum_tw_arr[w_dm_id] = sum_tw_arr[w_dm_id] + sum_tw;
+                }
+            }
+            try
+            {
+
+            }
+            catch(MySqlException)
+            {
+                reader.Close();
+                MessageBox.Show("department darw chart SELECT FROM workrecord FAIL !!!");
+                return;
+            }
+            reader.Close();
+
+            List<DateTime> totalWorkList = new List<DateTime>();
+            for(int i = 0; i < w_twcnt_arr.Length; i++)
+            {
+                if(sum_tw_arr[i] == 0)
+                {
+                    DateTime temp = new DateTime(2021, 1, 1, 0, 0, 0);
+                    totalWorkList.Add(temp);
+                }
+                else
+                {
+                    DateTime temp = new DateTime(2021, 1, 1, (int)((sum_tw_arr[i] / w_twcnt_arr[i]) / 3600), (int)((sum_tw_arr[i] / w_twcnt_arr[i]) / 60 % 60), 0);
+                    totalWorkList.Add(temp);
+                }
+            }
+            
+            dp_avg_chart.Series.Clear();
+            dp_avg_chart.Series.Add("Series1");
+            dp_avg_chart.Series[0].YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Time;
+            dp_avg_chart.ChartAreas[0].AxisY.LabelStyle.Format = "HH:mm";
+            dp_avg_chart.ChartAreas[0].AxisX.Interval = 1;
+            Random rnd = new Random();
+            string point_label = "";
+
+            for (int i = 0; i < w_twcnt_arr.Length; i++)
+            {
+                dp_avg_chart.Series[0].Points.AddXY(department_name[i], totalWorkList[i]);
+                dp_avg_chart.Series[0].Points[i].Color = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
+                point_label = string.Format("{0:HH:mm}", totalWorkList[i]);
+                dp_avg_chart.Series[0].Points[i].Label = point_label;
+                dp_avg_chart.Series[0].Points[i].LabelForeColor = Color.DodgerBlue;
+                dp_avg_chart.Series[0].Points[i].Font = new Font("MD이솝체", 12, FontStyle.Bold);
+            }
+
+            reader.Close();
+            // 20210521
+            label_dp_searchName.Text = from_year + "년 " + from_month_sql.Substring(4, 2) + "월 부서별 평균 근무시간 현황";
+        }
+        private void dp_search_chart()
+        {
+            DateTime today = DateTime.Today;
+            string from_year = "";
+            if (tb_dp_year.Text == "")
+            {
+                from_year = today.Year.ToString();
+            }
+            else if (tb_dp_year.Text.Length != 4)
+            {
+                from_year = today.Year.ToString();
+            }
+            else
+            {
+                from_year = tb_dp_year.Text;
+            }
+
+            string from_month = "";
+            if (tb_dp_month.Text == "")
+            {
+                if (today.Month < 10)
+                {
+                    from_month = "0" + today.Month.ToString();
+                }
+                else
+                {
+                    from_month = today.Month.ToString();
+                }
+            }
+            else
+            {
+                if (int.Parse(tb_dp_month.Text) < 10 && tb_dp_month.Text.Length < 2)
+                {
+                    from_month = "0" + tb_dp_month.Text;
+                }
+                else
+                {
+                    from_month = tb_dp_month.Text;
+                }
+            }
+            string from_month_sql = from_year + from_month + "01";
+
+            string to_year = "";
+            string to_month = "";
+            if (int.Parse(from_month) == 12)
+            {
+                to_year = (int.Parse(from_year) + 1).ToString();
+                to_month = "01";
+            }
+            else if (int.Parse(from_month) < 10) // 1 ~ 9
+            {
+                to_year = from_year;
+                to_month = "0" + (int.Parse(from_month) + 1).ToString();
+            }
+            else // (10 ~ 11)
+            {
+                to_year = from_year;
+                to_month = (int.Parse(from_month) + 1).ToString();
+            }
+            string to_month_sql = to_year + to_month + "01";
+            drawDpChart(from_year, from_month_sql, to_month_sql);
+        }
+        private void btn_dp_search1_Click(object sender, EventArgs e)
+        {
+            dp_search_chart();
+        }
+        private void btn_dp_search2_Click(object sender, EventArgs e)
+        {
+            dp_search_chart();
+        }
+        private void tp_department_TnA_status_Paint(object sender, PaintEventArgs e)
+        {
+            // draw textbox BorderLine
+            tb_dp_year.BorderStyle = BorderStyle.None;
+            Pen p = new Pen(Color.DodgerBlue);
+            Graphics g = e.Graphics;
+            int variance = 1;
+            g.DrawRectangle(p, new Rectangle(tb_dp_year.Location.X - variance, tb_dp_year.Location.Y - variance, tb_dp_year.Width + variance, tb_dp_year.Height + variance));
+
+            tb_dp_month.BorderStyle = BorderStyle.None;
+            Graphics g2 = e.Graphics;
+            g2.DrawRectangle(p, new Rectangle(tb_dp_month.Location.X - variance, tb_dp_month.Location.Y - variance, tb_dp_month.Width + variance, tb_dp_month.Height + variance));
+        }
+        private void label4_Paint(object sender, PaintEventArgs e)
+        {
+            // draw label BorderLine
+            ControlPaint.DrawBorder(e.Graphics, label4.DisplayRectangle, Color.FromArgb(0, 0, 192), ButtonBorderStyle.Solid);
+        }
+        private void label8_Paint(object sender, PaintEventArgs e)
+        {
+            ControlPaint.DrawBorder(e.Graphics, label8.DisplayRectangle, Color.FromArgb(0, 0, 192), ButtonBorderStyle.Solid);
+        }
+        // ---------------------------------------- end department avg chart ----------------------------------------
+
         // ---------------------------------------- start menu design ----------------------------------------
         private List<Label> menu;
 
@@ -1419,6 +1605,324 @@ namespace Attendance_Management_Program
             setMenuChgane(7);
         }
         // ---------------------------------------- end menu design ----------------------------------------
+
+        // ---------------------------------------- start C# -> Excel ----------------------------------------
+        private void btn_list_manage_excel_Click(object sender, EventArgs e)
+        {
+            excelApp = null;
+            workBook = null;
+            workSheet1 = null;
+            workSheet2 = null;
+            int start_cell_y = 4, start_cell_x = 3, start_row_y = 5, start_row_x = 3;
+            DateTime today = DateTime.Now;
+            string today_now = today.ToString("yyyy-MM-dd HH-mm-ss");
+            label_manage_excel_save.Visible = true;
+            label_manage_excel_save.Text = "엑셀로 저장중... 0%";
+            try
+            {
+                // list management
+                string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop); // 바탕화면 경로 
+                string path = Path.Combine(desktopPath, "목록관리" + today_now + ".xlsx"); // 엑셀 파일 저장 경로 
+                excelApp = new Excel.Application(); // 엑셀 어플리케이션 생성 
+                workBook = excelApp.Workbooks.Add(); // 워크북 추가 
+                workSheet1 = workBook.Worksheets.Add(Type.Missing, workBook.Worksheets[1]); // 엑셀 첫번째 워크시트 가져오기 
+                workSheet1.Name = "목록관리";
+                // cell
+                for (int i = 0; i < dataGridView1.Columns.Count; i++)
+                {
+                    workSheet1.Cells[start_cell_y, start_cell_x + i] = dataGridView1.Columns[i].Name;
+                    if (i == dataGridView1.Columns.Count - 1)
+                    {
+                        Excel.Range celMerge1 = workSheet1.Range[workSheet1.Cells[start_cell_y, start_cell_x], workSheet1.Cells[start_cell_y, start_cell_x + i]];
+                        celMerge1.Cells.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+                        celMerge1.Cells.Font.Size = 14;
+                        celMerge1.Cells.Font.Color = Color.White;
+                        celMerge1.Cells.Font.Bold = true;
+                        celMerge1.Cells.Font.Name = "맑은 고딕";
+                        celMerge1.Interior.Color = Color.FromArgb(20, 25, 72);
+                        celMerge1.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
+                    }
+                }
+                label_manage_excel_save.Text = "엑셀로 저장중... 10%";
+                // rows
+                // dataGridView1.Rows[dataGridView1.Rows.Count - 1].Cells[0].Value = "";
+                for (int i = 0; i < dataGridView1.Rows.Count; i++)
+                {
+                    for(int j = 0; j < dataGridView1.Rows[i].Cells.Count; j++)
+                    {
+                        workSheet1.Cells[start_row_y + i, start_row_x + j] = dataGridView1.Rows[i].Cells[j].Value.ToString();
+                        if(i == dataGridView1.Rows.Count - 1 && j == dataGridView1.Rows[i].Cells.Count - 1)
+                        {
+                            Excel.Range celMerge1 = workSheet1.Range[workSheet1.Cells[start_row_y, start_row_x], workSheet1.Cells[start_row_y + i, start_row_x + j]];
+                            celMerge1.Cells.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+                            celMerge1.Cells.Font.Size = 12;
+                            celMerge1.Cells.Font.Color = Color.Black;
+                            celMerge1.Cells.Font.Bold = true;
+                            celMerge1.Cells.Font.Name = "맑은 고딕";
+                            celMerge1.Interior.Color = Color.LightYellow;
+                            celMerge1.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
+                        }
+                    }
+                }
+                label_manage_excel_save.Text = "엑셀로 저장중... 20%";
+                // last rows
+                Excel.Range celMerge2 = workSheet1.Range[workSheet1.Cells[start_row_y + dataGridView1.Rows.Count - 1, start_row_x], workSheet1.Cells[start_row_y + dataGridView1.Rows.Count - 1, start_row_x + dataGridView1.Rows[0].Cells.Count - 1]];
+                celMerge2.Merge();
+                celMerge2.Interior.Color = Color.FromArgb(20, 25, 72);
+                celMerge2.Cells.Font.Size = 14;
+                celMerge2.Cells.Font.Color = Color.White;
+                celMerge2.Cells.Font.Bold = true;
+                celMerge2.Cells.Font.Name = "맑은 고딕";
+                celMerge2.Cells.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+
+                workSheet2 = workBook.Worksheets.Add(Type.Missing, workBook.Worksheets[2]); // 엑셀 두번째 워크시트 가져오기
+                workSheet2.Name = "사원 정보";
+                label_manage_excel_save.Text = "엑셀로 저장중... 40%";
+                // cell
+                for (int i = 0; i < dataGridView2.Columns.Count; i++)
+                {
+                    workSheet2.Cells[start_cell_y, start_cell_x + i] = dataGridView2.Columns[i].Name;
+                    if(i == dataGridView2.Columns.Count - 1)
+                    {
+                        Excel.Range celMerge1 = workSheet2.Range[workSheet2.Cells[start_cell_y, start_cell_x], workSheet2.Cells[start_cell_y, start_cell_x + i]];
+                        celMerge1.Cells.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+                        celMerge1.Cells.Font.Size = 14;
+                        celMerge1.Cells.Font.Color = Color.White;
+                        celMerge1.Cells.Font.Bold = true;
+                        celMerge1.Cells.Font.Name = "맑은 고딕";
+                        celMerge1.Interior.Color = Color.FromArgb(20, 25, 72);
+                        celMerge1.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
+                    }
+                }
+                label_manage_excel_save.Text = "엑셀로 저장중... 60%";
+                // rows
+                for (int i = 0; i < dataGridView2.Rows.Count; i++)
+                {
+                    for (int j = 0; j < dataGridView2.Rows[i].Cells.Count; j++)
+                    {
+                        workSheet2.Cells[start_row_y + i, start_row_x + j] = dataGridView2.Rows[i].Cells[j].Value.ToString();
+                        if (i == dataGridView2.Rows.Count - 1 && j == dataGridView2.Rows[i].Cells.Count - 1)
+                        {
+                            Excel.Range celMerge1 = workSheet2.Range[workSheet2.Cells[start_row_y, start_row_x], workSheet2.Cells[start_row_y + i, start_row_x + j]];
+                            celMerge1.Cells.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+                            celMerge1.Cells.Font.Size = 12;
+                            celMerge1.Cells.Font.Color = Color.Black;
+                            celMerge1.Cells.Font.Bold = true;
+                            celMerge1.Cells.Font.Name = "맑은 고딕";
+                            celMerge1.Interior.Color = Color.LightYellow;
+                            celMerge1.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
+                        }
+                    }
+                }
+                label_manage_excel_save.Text = "엑셀로 저장중... 70%";
+                // last rows
+                Excel.Range celMerge3 = workSheet2.Range[workSheet2.Cells[start_row_y + dataGridView2.Rows.Count - 1, start_row_x], workSheet2.Cells[start_row_y + dataGridView2.Rows.Count - 1, start_row_x + dataGridView2.Rows[0].Cells.Count - 1]];
+                celMerge3.Merge();
+                celMerge3.Interior.Color = Color.FromArgb(20, 25, 72);
+                celMerge3.Cells.Font.Size = 14;
+                celMerge3.Cells.Font.Color = Color.White;
+                celMerge3.Cells.Font.Bold = true;
+                celMerge3.Cells.Font.Name = "맑은 고딕";
+                celMerge3.Cells.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+                label_manage_excel_save.Text = "엑셀로 저장중... 80%";
+                workSheet1.Columns.AutoFit(); // 열 너비 자동 맞춤 
+                workSheet2.Columns.AutoFit(); // 열 너비 자동 맞춤 
+                workBook.SaveAs(path, Excel.XlFileFormat.xlWorkbookDefault); // 엑셀 파일 저장 
+                workBook.Close(true);
+                label_manage_excel_save.Text = "엑셀로 저장중... 100%";
+                excelApp.Quit();
+                
+            } 
+            finally 
+            {
+                ReleaseObject(workSheet2);
+                ReleaseObject(workSheet1);
+                ReleaseObject(workBook);
+                ReleaseObject(excelApp);
+                label_manage_excel_save.Visible = false;
+                MessageBox.Show("Save Complete !!!");
+            }
+        }
+        private void btn_record_excel_Click(object sender, EventArgs e)
+        {
+            excelApp = null;
+            workBook = null;
+            workSheet1 = null;
+            int start_cell_y = 4, start_cell_x = 3, start_row_y = 5, start_row_x = 3;
+            DateTime today = DateTime.Now;
+            string today_now = today.ToString("yyyy-MM-dd HH-mm-ss");
+            label_record_excel_save.Visible = true;
+            label_record_excel_save.Text = "엑셀로 저장중... 0%";
+            try
+            {
+                // list management
+                string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop); // 바탕화면 경로 
+                string path = Path.Combine(desktopPath, "출입기록" + today_now + ".xlsx"); // 엑셀 파일 저장 경로 
+                excelApp = new Excel.Application(); // 엑셀 어플리케이션 생성 
+                workBook = excelApp.Workbooks.Add(); // 워크북 추가 
+                workSheet1 = workBook.Worksheets.Add(Type.Missing, workBook.Worksheets[1]); // 엑셀 첫번째 워크시트 가져오기 
+                workSheet1.Name = "목록관리";
+                // cell
+                for (int i = 0; i < dgv_record.Columns.Count; i++)
+                {
+                    workSheet1.Cells[start_cell_y, start_cell_x + i] = dgv_record.Columns[i].Name;
+                    if (i == dgv_record.Columns.Count - 1)
+                    {
+                        Excel.Range celMerge1 = workSheet1.Range[workSheet1.Cells[start_cell_y, start_cell_x], workSheet1.Cells[start_cell_y, start_cell_x + i]];
+                        celMerge1.Cells.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+                        celMerge1.Cells.Font.Size = 14;
+                        celMerge1.Cells.Font.Color = Color.White;
+                        celMerge1.Cells.Font.Bold = true;
+                        celMerge1.Cells.Font.Name = "맑은 고딕";
+                        celMerge1.Interior.Color = Color.FromArgb(20, 25, 72);
+                        celMerge1.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
+                    }
+                }
+                label_record_excel_save.Text = "엑셀로 저장중... 20%";
+                // rows
+                for (int i = 0; i < dgv_record.Rows.Count; i++)
+                {
+                    for (int j = 0; j < dgv_record.Rows[i].Cells.Count; j++)
+                    {
+                        if (dgv_record.Rows[i].Cells[j].Value == null)
+                        {
+                            workSheet1.Cells[start_row_y + i, start_row_x + j] = "";
+                        }
+                        else
+                        {
+                            workSheet1.Cells[start_row_y + i, start_row_x + j] = dgv_record.Rows[i].Cells[j].Value.ToString();
+                        }
+                        if (i == dgv_record.Rows.Count - 1 && j == dgv_record.Rows[i].Cells.Count - 1)
+                        {
+                            label_record_excel_save.Text = "엑셀로 저장중... 60%";
+                            Excel.Range celMerge1 = workSheet1.Range[workSheet1.Cells[start_row_y, start_row_x], workSheet1.Cells[start_row_y + i, start_row_x + j]];
+                            celMerge1.Cells.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+                            celMerge1.Cells.Font.Size = 12;
+                            celMerge1.Cells.Font.Color = Color.Black;
+                            celMerge1.Cells.Font.Bold = true;
+                            celMerge1.Cells.Font.Name = "맑은 고딕";
+                            celMerge1.Interior.Color = Color.LightYellow;
+                            celMerge1.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
+                        }
+                    }
+                }
+                label_record_excel_save.Text = "엑셀로 저장중... 90%";
+                workSheet1.Columns.AutoFit(); // 열 너비 자동 맞춤 
+                workBook.SaveAs(path, Excel.XlFileFormat.xlWorkbookDefault); // 엑셀 파일 저장 
+                label_record_excel_save.Text = "엑셀로 저장중... 100%";
+                workBook.Close(true);
+                excelApp.Quit();
+            }
+            finally
+            {
+                ReleaseObject(workSheet1);
+                ReleaseObject(workBook);
+                ReleaseObject(excelApp);
+                label_record_excel_save.Visible = false;
+                MessageBox.Show("Save Complete !!!");
+            }
+        }
+        private void btn_monthly_excel_Click(object sender, EventArgs e)
+        {
+            excelApp = null;
+            workBook = null;
+            workSheet1 = null;
+            int start_cell_y = 4, start_cell_x = 3, start_row_y = 5, start_row_x = 3;
+            DateTime today = DateTime.Now;
+            string today_now = today.ToString("yyyy-MM-dd HH-mm-ss");
+            label_monthly_TnA_excel.Visible = true;
+            label_monthly_TnA_excel.Text = "엑셀로 저장중... 0%";
+            try
+            {
+                // list management
+                string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop); // 바탕화면 경로 
+                string path = Path.Combine(desktopPath, "월 출입 기록" + today_now + ".xlsx"); // 엑셀 파일 저장 경로 
+                excelApp = new Excel.Application(); // 엑셀 어플리케이션 생성 
+                workBook = excelApp.Workbooks.Add(); // 워크북 추가 
+                workSheet1 = workBook.Worksheets.Add(Type.Missing, workBook.Worksheets[1]); // 엑셀 첫번째 워크시트 가져오기 
+                workSheet1.Name = "목록관리";
+                // cell
+                for (int i = 0; i < dgv_monthly.Columns.Count; i++)
+                {
+                    workSheet1.Cells[start_cell_y, start_cell_x + i] = dgv_monthly.Columns[i].Name;
+                    if (i == dgv_monthly.Columns.Count - 1)
+                    {
+                        Excel.Range celMerge1 = workSheet1.Range[workSheet1.Cells[start_cell_y, start_cell_x], workSheet1.Cells[start_cell_y, start_cell_x + i]];
+                        celMerge1.Cells.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+                        celMerge1.Cells.Font.Size = 14;
+                        celMerge1.Cells.Font.Color = Color.White;
+                        celMerge1.Cells.Font.Bold = true;
+                        celMerge1.Cells.Font.Name = "맑은 고딕";
+                        celMerge1.Interior.Color = Color.FromArgb(20, 25, 72);
+                        celMerge1.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
+                    }
+                }
+                label_monthly_TnA_excel.Text = "엑셀로 저장중... 20%";
+                // rows
+                for (int i = 0; i < dgv_monthly.Rows.Count; i++)
+                {
+                    for (int j = 0; j < dgv_monthly.Rows[i].Cells.Count; j++)
+                    {
+                        if (dgv_monthly.Rows[i].Cells[j].Value == null)
+                        {
+                            workSheet1.Cells[start_row_y + i, start_row_x + j] = "";
+                        }
+                        else
+                        {
+                            workSheet1.Cells[start_row_y + i, start_row_x + j] = dgv_monthly.Rows[i].Cells[j].Value.ToString();
+                        }
+                        if (i == dgv_monthly.Rows.Count - 1 && j == dgv_monthly.Rows[i].Cells.Count - 1)
+                        {
+                            label_monthly_TnA_excel.Text = "엑셀로 저장중... 60%";
+                            Excel.Range celMerge1 = workSheet1.Range[workSheet1.Cells[start_row_y, start_row_x], workSheet1.Cells[start_row_y + i, start_row_x + j]];
+                            celMerge1.Cells.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+                            celMerge1.Cells.Font.Size = 12;
+                            celMerge1.Cells.Font.Color = Color.Black;
+                            celMerge1.Cells.Font.Bold = true;
+                            celMerge1.Cells.Font.Name = "맑은 고딕";
+                            celMerge1.Interior.Color = Color.LightYellow;
+                            celMerge1.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
+                        }
+                    }
+                }
+                label_monthly_TnA_excel.Text = "엑셀로 저장중... 90%";
+                workSheet1.Columns.AutoFit(); // 열 너비 자동 맞춤 
+                workBook.SaveAs(path, Excel.XlFileFormat.xlWorkbookDefault); // 엑셀 파일 저장 
+                label_monthly_TnA_excel.Text = "엑셀로 저장중... 100%";
+                workBook.Close(true);
+                excelApp.Quit();
+            }
+            finally
+            {
+                ReleaseObject(workSheet1);
+                ReleaseObject(workBook);
+                ReleaseObject(excelApp);
+                label_monthly_TnA_excel.Visible = false;
+                MessageBox.Show("Save Complete !!!");
+            }
+        }
+        static void ReleaseObject(object obj)
+        {
+            try
+            {
+                if (obj != null)
+                {
+                    Marshal.ReleaseComObject(obj); // 액셀 객체 해제 
+                    obj = null; 
+                } 
+            } 
+            catch(Exception ex) 
+            { 
+                obj = null; 
+                throw ex; 
+            } 
+            finally 
+            { 
+                GC.Collect(); // 가비지 수집 
+            } 
+        }
+
+        // ---------------------------------------- end C# -> Excel ----------------------------------------
 
         // Reference address
         // https://program-day.tistory.com/18
