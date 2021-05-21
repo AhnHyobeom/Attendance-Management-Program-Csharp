@@ -18,7 +18,7 @@ namespace Attendance_Management_Program
     public partial class Form1 : Form
     {
         // using DB
-        String connStr = "Server=127.0.0.1;Uid=root;Pwd=1234;Database=amp_db;Charset=UTF8";
+        String connStr = "Server=dksgyqja123.cafe24.com;Uid=dksgyqja123;Pwd=rhkrgn19!;Database=dksgyqja123;Charset=UTF8";
         MySqlConnection conn;
         MySqlCommand cmd;
         String sql = "";
@@ -323,7 +323,7 @@ namespace Attendance_Management_Program
 
             count = -1;
             // work_on ??? work_off ???
-            sql = "SELECT COUNT(*) AS cnt FROM workrecord WHERE w_e_rfid = '";
+            sql = "SELECT COUNT(*) AS cnt FROM workRecord WHERE w_e_rfid = '";
             sql += datain + "' AND w_day = '" + yyyy_MM_dd + "'";
             try
             {
@@ -423,7 +423,7 @@ namespace Attendance_Management_Program
                 TimeSpan temp_w_workonTime = new TimeSpan();
                 try
                 {
-                    sql = "SELECT w_workonTime FROM workrecord WHERE w_e_rfid = '" + datain + "' AND ";
+                    sql = "SELECT w_workonTime FROM workRecord WHERE w_e_rfid = '" + datain + "' AND ";
                     sql += "w_day = '" + yyyy_MM_dd + "'";
                     cmd.CommandText = sql;
                     reader = cmd.ExecuteReader();
@@ -440,7 +440,7 @@ namespace Attendance_Management_Program
                 // WHERE w_e_rfid = '0000000011' AND w_day = '2021-05-11';
                 try
                 {
-                    sql = "UPDATE workrecord SET w_workoffTime = '";
+                    sql = "UPDATE workRecord SET w_workoffTime = '";
                     sql += w_workonTime + "', w_workoffcf = '" + w_workoffcf + "'";
                     sql += ", w_ew = '" + w_ew + "', w_tw = '" + w_tw + "' ";
                     sql += "WHERE w_e_rfid = '" + datain + "' AND w_day = '" + yyyy_MM_dd + "'";
@@ -740,7 +740,7 @@ namespace Attendance_Management_Program
         {
             try
             {
-                sql = "SELECT w_e_name, w_tw FROM workrecord WHERE w_day = '";
+                sql = "SELECT w_e_name, w_tw FROM workRecord WHERE w_day = '";
                 sql += year + month + day + "'";
                 cmd.CommandText = sql;
                 reader = cmd.ExecuteReader();
@@ -748,12 +748,12 @@ namespace Attendance_Management_Program
             catch(MySqlException)
             {
                 reader.Close();
-                MessageBox.Show("drawChartDaily FROM workrecord Exception !!!");
+                MessageBox.Show("drawChartDaily FROM workRecord Exception !!!");
             }
             List<string> w_e_name = new List<string>();
             TimeSpan w_tw = new TimeSpan();
             List<DateTime> totalWorkList = new List<DateTime>();
-
+            MessageBox.Show(sql);
             while(reader.Read())
             {
                 w_e_name.Add((string)reader["w_e_name"]);
@@ -879,7 +879,7 @@ namespace Attendance_Management_Program
                 sql = "SELECT w_dm_id, w_e_name, w_e_position, COUNT(CASE WHEN w_workoncf = '지각' THEN 1 END) AS cntLate, ";
                 sql += "COUNT(CASE WHEN w_workoffcf = '조퇴' THEN 1 END) AS cntEarly, ";
                 sql += "COUNT(CASE WHEN w_workoncf = '결근' THEN 1 END) AS cntOff, SUM(TIME_TO_SEC(w_ew)) AS sum_ew, ";
-                sql += "SUM(TIME_TO_SEC(w_hw)) AS sum_hw, SUM(TIME_TO_SEC(w_tw)) AS sum_tw FROM workrecord WHERE w_e_rfid = '";
+                sql += "SUM(TIME_TO_SEC(w_hw)) AS sum_hw, SUM(TIME_TO_SEC(w_tw)) AS sum_tw FROM workRecord WHERE w_e_rfid = '";
                 sql += e_id_list[i] + "' AND w_day >= '" + from_month_sql + "' AND w_day < '" + to_month_sql + "'";
                 try
                 {
@@ -1034,7 +1034,7 @@ namespace Attendance_Management_Program
                 sql = "SELECT w_dm_id, w_e_name, w_e_position, COUNT(CASE WHEN w_workoncf = '지각' THEN 1 END) AS cntLate, ";
                 sql += "COUNT(CASE WHEN w_workoffcf = '조퇴' THEN 1 END) AS cntEarly, ";
                 sql += "COUNT(CASE WHEN w_workoncf = '결근' THEN 1 END) AS cntOff, SUM(TIME_TO_SEC(w_ew)) AS sum_ew, ";
-                sql += "SUM(TIME_TO_SEC(w_hw)) AS sum_hw, SUM(TIME_TO_SEC(w_tw)) AS sum_tw FROM workrecord WHERE w_e_rfid = '";
+                sql += "SUM(TIME_TO_SEC(w_hw)) AS sum_hw, SUM(TIME_TO_SEC(w_tw)) AS sum_tw FROM workRecord WHERE w_e_rfid = '";
                 sql += e_id_list[i] + "' AND w_day >= '" + from_month_sql + "' AND w_day < '" + to_month_sql + "'";
                 try
                 {
@@ -1116,7 +1116,7 @@ namespace Attendance_Management_Program
             // WHERE w_day >= '20210501' AND w_day < '20210601' GROUP BY w_e_rfid;
             try
             {
-                sql = "SELECT w_e_name, SUM(TIME_TO_SEC(w_tw)) AS sum_tw FROM workrecord ";
+                sql = "SELECT w_e_name, SUM(TIME_TO_SEC(w_tw)) AS sum_tw FROM workRecord ";
                 sql += "WHERE w_day >= '" + from_month_sql + "' AND w_day < '" + to_month_sql + "' GROUP BY w_e_rfid";
                 cmd.CommandText = sql;
                 reader = cmd.ExecuteReader();
@@ -1257,7 +1257,7 @@ namespace Attendance_Management_Program
                     // retirement table upload
                     // SELECT w_e_name, w_dm_id, w_e_position, MIN(w_day) AS start_date, 
                     // MAX(w_day) AS last_date FROM workrecord WHERE w_e_rfid = '6a703fb491';
-                    sql = "SELECT MIN(w_day) AS start_date, MAX(w_day) AS last_date FROM workrecord WHERE w_e_rfid = '";
+                    sql = "SELECT MIN(w_day) AS start_date, MAX(w_day) AS last_date FROM workRecord WHERE w_e_rfid = '";
                     sql += tb_registration_rfid.Text + "'";
                     cmd.CommandText = sql;
                     reader = cmd.ExecuteReader();
@@ -1292,7 +1292,7 @@ namespace Attendance_Management_Program
                     showRetirementDGV();
 
                     // delete
-                    sql = "DELETE FROM workrecord WHERE w_e_rfid = '";
+                    sql = "DELETE FROM workRecord WHERE w_e_rfid = '";
                     sql += tb_registration_rfid.Text + "'";
                     cmd.CommandText = sql;
                     cmd.ExecuteNonQuery();
@@ -1416,7 +1416,7 @@ namespace Attendance_Management_Program
             // SUM(TIME_TO_SEC(w_tw)) AS sum_tw FROM workrecord WHERE w_day >= '20210501' 
             // AND w_day < '20210601' GROUP BY w_e_rfid ORDER BY w_dm_id;
             sql = "SELECT w_dm_id, COUNT(CASE WHEN w_tw >= '00:00:00' THEN 1 END) AS w_twcnt, ";
-            sql += "SUM(TIME_TO_SEC(w_tw)) AS sum_tw FROM workrecord WHERE w_day >= '" + from_month_sql;
+            sql += "SUM(TIME_TO_SEC(w_tw)) AS sum_tw FROM workRecord WHERE w_day >= '" + from_month_sql;
             sql += "' AND w_day < '" + to_month_sql + "' GROUP BY w_e_rfid ORDER BY w_dm_id";
             cmd.CommandText = sql;
             reader = cmd.ExecuteReader();
