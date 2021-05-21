@@ -18,7 +18,7 @@ namespace Attendance_Management_Program
     public partial class Form1 : Form
     {
         // using DB
-        String connStr = "Server=dksgyqja123.cafe24.com;Uid=dksgyqja123;Pwd=rhkrgn19!;Database=dksgyqja123;Charset=UTF8";
+        String connStr = "Server=Server;Uid=dbid;Pwd=pwd;Database=dksgyqja123;Charset=UTF8";
         MySqlConnection conn;
         MySqlCommand cmd;
         String sql = "";
