@@ -122,7 +122,7 @@ namespace Attendance_Management_Program
             {
                 serialPort1.PortName = "COM3";
                 serialPort1.BaudRate = 115200;
-                serialPort1.Open(); // 예외 처리 집어 넣을것
+                serialPort1.Open();
                 serialPort1.DiscardOutBuffer();
                 serialPort1.DiscardInBuffer();
                 serialPort1.WriteLine("normalMODE" + Environment.NewLine);
